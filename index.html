@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fresh Drop Rwanda - Fresh Groceries Delivered Daily</title>
+  <link rel="icon" type="image/png" href="image1.png" />
+  <meta name="description" content="Fresh Drop Rwanda - Premium grocery delivery service with fresh meat, fruits, vegetables, drinks, and organic foods. Fast delivery in Kigali.">
+  <meta name="keywords" content="fresh drop rwanda, groceries, delivery, kigali, fresh food, meat, fruits, vegetables">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="#" class="logo">
+          <img src="logo.png" alt="Fresh Drop Rwanda" class="logo-img">
+          <div class="logo-text">
+            <div class="brand-name">Fresh Drop Rwanda</div>
+            <div class="brand-tagline">Freshness delivered, daily</div>
+          </div>
+        </a>
+
+        <nav class="nav-links">
+          <a href="#home" class="nav-link active">Home</a>
+          <a href="#products" class="nav-link">Products</a>
+          <a href="#" class="nav-link about-link">About</a>
+        </nav>
+
+        <div class="nav-actions">
+          <button class="cart-icon" id="cartIcon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+          <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <div class="mobile-logo">
+        <img src="image1.png" alt="Fresh Drop Rwanda" class="mobile-logo-img">
+        <div class="mobile-logo-text">
+          <div class="mobile-brand-name">Fresh Drop Rwanda</div>
+          <div class="mobile-brand-tagline">Freshness delivered, daily</div>
+        </div>
+      </div>
+      <button class="close-mobile-menu" id="closeMobileMenu">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <nav class="mobile-nav-links">
+      <a href="#home" class="mobile-nav-link active" data-section="home">
+        <i class="fas fa-home"></i>
+        Home
+      </a>
+      <a href="#products" class="mobile-nav-link" data-section="products">
+        <i class="fas fa-shopping-bag"></i>
+        Products
+      </a>
+      <a href="#" class="mobile-nav-link about-link" data-section="about">
+        <i class="fas fa-info-circle"></i>
+        About Us
+      </a>
+      <div class="mobile-menu-divider"></div>
+      <div class="mobile-categories">
+        <h4>Categories</h4>
+        <a href="#" class="mobile-category-link" data-category="all">
+          <i class="fas fa-th-large"></i>
+          All Products
+        </a>
+        <a href="#" class="mobile-category-link" data-category="Meat">
+          <i class="fas fa-drumstick-bite"></i>
+          Meat
+        </a>
+        <a href="#" class="mobile-category-link" data-category="Fruits & Vegetables">
+          <i class="fas fa-apple-alt"></i>
+          Fruits & Vegetables
+        </a>
+        <a href="#" class="mobile-category-link" data-category="Drinks">
+          <i class="fas fa-wine-bottle"></i>
+          Drinks
+        </a>
+        <a href="#" class="mobile-category-link" data-category="Organic & Animal-based Fresh Foods">
+          <i class="fas fa-leaf"></i>
+          Organic Foods
+        </a>
+      </div>
+      <div class="mobile-menu-divider"></div>
+      <div class="mobile-contact-info">
+        <h4>Contact Info</h4>
+        <div class="mobile-contact-item">
+          <i class="fas fa-phone"></i>
+          <span>+250 789 999 395</span>
+        </div>
+        <div class="mobile-contact-item">
+          <i class="fas fa-envelope"></i>
+          <span>ltdfreshdrop@gmail.com</span>
+        </div>
+        <div class="mobile-contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Kigali, Rwanda</span>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">Fresh Groceries Delivered to Your Door</h1>
+        <p class="hero-subtitle">Premium quality meat, fruits, vegetables, drinks and organic foods. Fast delivery in Kigali.</p>
+        <div class="hero-actions">
+          <a href="#products" class="btn btn-primary">
+            <i class="fas fa-shopping-bag"></i>
+            Shop Now
+          </a>
+          <button class="btn btn-secondary about-link">
+            <i class="fas fa-info-circle"></i>
+            Learn More
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Why Choose Fresh Drop Rwanda</h2>
+        <p class="section-subtitle">We're committed to bringing you the freshest products with the best service</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-shipping-fast"></i>
+          </div>
+          <h3 class="feature-title">Fast Delivery</h3>
+          <p class="feature-description">Get your groceries delivered quickly within Kigali. We prioritize freshness and speed.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <h3 class="feature-title">Fresh Quality</h3>
+          <p class="feature-description">All our products are carefully selected for premium quality and freshness.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-percentage"></i>
+          </div>
+          <h3 class="feature-title">Best Prices</h3>
+          <p class="feature-description">Competitive prices without compromising on quality. Great value for your money.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-headset"></i>
+          </div>
+          <h3 class="feature-title">24/7 Support</h3>
+          <p class="feature-description">Our customer service team is always ready to assist you with any questions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="section products-main-section" id="products">
+    <div class="container">
+      <div class="products-header">
+        <div class="section-header">
+          <h2 class="section-title" id="productsTitle">Popular Products</h2>
+          <p class="section-subtitle" id="productsSubtitle">Our customers' favorite items</p>
+        </div>
+        
+        <div class="products-controls">
+          <div class="search-container">
+            <div class="search-box">
+              <i class="fas fa-search search-icon"></i>
+              <input type="text" class="search-input" id="globalSearch" placeholder="Search products...">
+              <button class="search-clear" id="searchClear">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="category-filters">
+            <button class="category-filter active" data-category="all">All Products</button>
+            <button class="category-filter" data-category="Meat">🥩 Meat</button>
+            <button class="category-filter" data-category="Fruits & Vegetables">🍎 Fruits & Veggies</button>
+            <button class="category-filter" data-category="Drinks">🥤 Drinks</button>
+            <button class="category-filter" data-category="Organic & Animal-based Fresh Foods">🌿 Organic Foods</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="products-grid" id="productsGrid">
+        <!-- Products will be dynamically loaded here -->
+      </div>
+      
+      <div class="load-more-container" id="loadMoreContainer">
+        <button class="load-more-btn" id="loadMoreBtn">
+          <i class="fas fa-plus"></i>
+          Load More
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Modal -->
+  <div class="modal about-modal" id="aboutModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">About Fresh Drop Rwanda</h2>
+        <button class="close-modal" id="closeAboutModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="about-content">
+          <div class="about-image">
+            <img src="https://source.unsplash.com/600x400/?grocery,market" alt="Fresh Drop Rwanda">
+          </div>
+          <div class="about-text">
+            <h3>Your Trusted Grocery Partner in Kigali</h3>
+            <p>Fresh Drop Rwanda is a premier grocery delivery service committed to bringing the freshest and highest quality products directly to your doorstep in Kigali.</p>
+            
+            <p>Founded with a passion for quality and convenience, we source our products from trusted local farmers and suppliers, ensuring that you receive the best quality meat, fruits, vegetables, drinks, and organic foods.</p>
+            
+            <h4>Our Mission</h4>
+            <p>To make grocery shopping convenient, reliable, and enjoyable while supporting local producers and promoting healthy eating habits in our community.</p>
+            
+            <h4>Our Values</h4>
+            <ul class="values-list">
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Quality First:</strong> We never compromise on the freshness and quality of our products</span>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Customer Focus:</strong> Your satisfaction is our top priority</span>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Local Support:</strong> We partner with local farmers and producers</span>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Sustainability:</strong> We promote eco-friendly practices in our operations</span>
+              </li>
+            </ul>
+            
+            <div class="about-stats">
+              <div class="stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Happy Customers</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Products</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Support</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="toggleAboutModal()">
+          <i class="fas fa-shopping-bag"></i>
+          Start Shopping
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3 class="cart-title">Your Cart</h3>
+      <button class="close-cart" id="closeCart">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <!-- Cart items will be dynamically loaded here -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total:</span>
+        <span id="cartTotal">RWF 0</span>
+      </div>
+      <button class="checkout-btn" id="checkoutBtn">
+        <i class="fas fa-credit-card"></i>
+        Proceed to Checkout
+      </button>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>Fresh Drop Rwanda</h3>
+          <p>Your trusted partner for fresh groceries in Kigali. Quality products delivered to your doorstep.</p>
+          <div class="social-links">
+            <a href="#" class="btn btn-secondary">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="btn btn-secondary">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="btn btn-secondary">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="btn btn-secondary">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="#" class="about-link">About Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Categories</h3>
+          <ul class="footer-links">
+            <li><a href="#" data-category="Meat">Meat Products</a></li>
+            <li><a href="#" data-category="Fruits & Vegetables">Fruits & Vegetables</a></li>
+            <li><a href="#" data-category="Drinks">Drinks</a></li>
+            <li><a href="#" data-category="Organic & Animal-based Fresh Foods">Organic Foods</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Contact Info</h3>
+          <ul class="footer-links">
+            <li><i class="fas fa-phone"></i> +250 789 999 395</li>
+            <li><i class="fas fa-envelope"></i> ltdfreshdrop@gmail.com</li>
+            <li><i class="fas fa-map-marker-alt"></i> Kigali, Rwanda</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 Fresh Drop Rwanda. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
