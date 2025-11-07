@@ -293,14 +293,20 @@ async function handleSocialLogin(provider) {
         name: user.displayName || 'User',
         email: user.email,
         phone: user.phoneNumber || '',
+        address: '',
         photoURL: user.photoURL || '',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     }
     
     showNotification(`Welcome${user.displayName ? ' ' + user.displayName : ''}!`);
-    //toggleModal('loginModal');
-    //toggleModal('signupModal');
+    // Close any open auth modals
+    if (loginModal.classList.contains('active')) {
+      toggleModal('loginModal');
+    }
+    if (signupModal.classList.contains('active')) {
+      toggleModal('signupModal');
+    }
     
   } catch (error) {
     console.error('Social login error:', error);
@@ -341,6 +347,7 @@ async function handleSignup(e) {
       name: name,
       email: email,
       phone: phone,
+      address: '',
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
     
@@ -357,8 +364,12 @@ async function handleLogout() {
   try {
     await auth.signOut();
     showNotification('Logged out successfully');
+    
+    // Close modals and dropdowns
     closeMobileMenuFunction();
-    toggleModal('accountModal');
+    if (accountModal.classList.contains('active')) {
+      toggleModal('accountModal');
+    }
     userDropdown.classList.remove('active');
     userDropdownBtn.classList.remove('active');
   } catch (error) {
@@ -382,14 +393,75 @@ async function updateUserProfile(user) {
       mobileUserName.textContent = userData.name || 'User';
       mobileUserEmail.textContent = userData.email;
       
-      // Update account modal
+      // Update account modal - view mode
       userName.textContent = userData.name || 'User';
       userEmail.textContent = userData.email;
       userPhone.textContent = userData.phone || 'Not provided';
+      
+      // Update view mode details
+      document.getElementById('viewUserName').textContent = userData.name || 'User';
+      document.getElementById('viewUserEmail').textContent = userData.email;
+      document.getElementById('viewUserPhone').textContent = userData.phone || 'Not provided';
+      document.getElementById('viewUserAddress').textContent = userData.address || 'Not provided';
+      
+      // Update edit mode form
+      document.getElementById('editUserName').value = userData.name || '';
+      document.getElementById('editUserPhone').value = userData.phone || '';
+      document.getElementById('editUserAddress').value = userData.address || '';
     }
   } catch (error) {
     console.error('Error fetching user profile:', error);
   }
+}
+
+// Profile Edit Functionality
+function initProfileEdit() {
+  const editProfileBtn = document.getElementById('editProfileBtn');
+  const cancelEditBtn = document.getElementById('cancelEditBtn');
+  const profileEditForm = document.getElementById('profileEditForm');
+  const profileView = document.getElementById('profileView');
+  const profileEdit = document.getElementById('profileEdit');
+
+  editProfileBtn.addEventListener('click', () => {
+    profileView.style.display = 'none';
+    profileEdit.style.display = 'block';
+  });
+
+  cancelEditBtn.addEventListener('click', () => {
+    profileEdit.style.display = 'none';
+    profileView.style.display = 'block';
+  });
+
+  profileEditForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    if (!currentUser) {
+      showNotification('Please login to update profile');
+      return;
+    }
+
+    const name = document.getElementById('editUserName').value;
+    const phone = document.getElementById('editUserPhone').value;
+    const address = document.getElementById('editUserAddress').value;
+
+    try {
+      await db.collection('users').doc(currentUser.uid).update({
+        name: name,
+        phone: phone,
+        address: address
+      });
+
+      showNotification('Profile updated successfully!');
+      profileEdit.style.display = 'none';
+      profileView.style.display = 'block';
+      
+      // Refresh user data
+      updateUserProfile(currentUser);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      showNotification('Error updating profile');
+    }
+  });
 }
 
 function showUserMenu() {
@@ -1042,6 +1114,9 @@ async function initApp() {
   
   // Initialize payment system
   initPayment();
+  
+  // Initialize profile edit
+  initProfileEdit();
   
   // Test Firebase connection first
   const connected = await testFirebaseConnection();
