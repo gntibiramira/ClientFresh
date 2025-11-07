@@ -299,8 +299,8 @@ async function handleSocialLogin(provider) {
     }
     
     showNotification(`Welcome${user.displayName ? ' ' + user.displayName : ''}!`);
-    toggleModal('loginModal');
-    toggleModal('signupModal');
+    //toggleModal('loginModal');
+    //toggleModal('signupModal');
     
   } catch (error) {
     console.error('Social login error:', error);
