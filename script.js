@@ -1,732 +1,18 @@
 // Complete Product Data
-const PRODUCTS = [
-  // Organic & Animal-based Fresh Foods
-  {
-    "id": 1000,
-    "title": "Beans (1kg)",
-    "category": "Organic & Animal-based Fresh Foods",
-    "price": 1200,
-    "img": "https://source.unsplash.com/800x600/?beans",
-    "popular": true
-  },
-  {
-    "id": 1001,
-    "title": "Maize/Corn (1kg)",
-    "category": "Organic & Animal-based Fresh Foods",
-    "price": 800,
-    "img": "https://source.unsplash.com/800x600/?corn",
-    "popular": true
-  },
-  {
-    "id": 1002,
-    "title": "Soybean (1kg)",
-    "category": "Organic & Animal-based Fresh Foods",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?soybean"
-  },
-  {
-    "id": 1003,
-    "title": "Groundnuts/Peanuts (1kg)",
-    "category": "Organic & Animal-based Fresh Foods",
-    "price": 1800,
-    "img": "https://source.unsplash.com/800x600/?peanuts"
-  },
-  {
-    "id": 1004,
-    "title": "Rice (1kg)",
-    "category": "Organic & Animal-based Fresh Foods",
-    "price": 2000,
-    "img": "https://source.unsplash.com/800x600/?rice",
-    "popular": true
-  },
-  {
-    "id": 1005,
-    "title": "Sorghum (1kg)",
-    "category": "Organic & Animal-based Fresh Foods",
-    "price": 1000,
-    "img": "https://source.unsplash.com/800x600/?sorghum"
-  },
-  {
-    "id": 1006,
-    "title": "Millet (1kg)",
-    "category": "Organic & Animal-based Fresh Foods",
-    "price": 1200,
-    "img": "https://source.unsplash.com/800x600/?millet"
-  },
-  {
-    "id": 1047,
-    "title": "Irish Potato (1kg)",
-    "category": "Organic & Animal-based Fresh Foods",
-    "price": 1200,
-    "img": "https://source.unsplash.com/800x600/?potato",
-    "popular": true
-  },
-  {
-    "id": 1048,
-    "title": "Sweet Potato (1kg)",
-    "category": "Organic & Animal-based Fresh Foods",
-    "price": 1000,
-    "img": "https://source.unsplash.com/800x600/?sweet-potato"
-  },
-  {
-    "id": 1049,
-    "title": "Green Beans (1kg)",
-    "category": "Organic & Animal-based Fresh Foods",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?green-beans"
-  },
+// Firebase configuration
+const firebaseConfig = {
+	apiKey: "AIzaSyDi35okgsN4YgBxCHi5jgRtF20Dd2X8PFc",
+    authDomain: "fresh-drop-rwanda-ad11f.firebaseapp.com",
+    projectId: "fresh-drop-rwanda-ad11f",
+    storageBucket: "fresh-drop-rwanda-ad11f.firebasestorage.app",
+    messagingSenderId: "1045979954241",
+    appId: "1:1045979954241:web:3663d006c3ae9ae62bdac0"
+};
 
-  // Meat Products
-  {
-    "id": 1008,
-    "title": "Fresh Beef (1kg)",
-    "category": "Meat",
-    "price": 3500,
-    "img": "https://source.unsplash.com/800x600/?beef",
-    "popular": true
-  },
-  {
-    "id": 1009,
-    "title": "Beef Steak (1kg)",
-    "category": "Meat",
-    "price": 5000,
-    "img": "https://source.unsplash.com/800x600/?steak"
-  },
-  {
-    "id": 1010,
-    "title": "Minced Beef (1kg)",
-    "category": "Meat",
-    "price": 4500,
-    "img": "https://source.unsplash.com/800x600/?minced-beef"
-  },
-  {
-    "id": 1011,
-    "title": "Beef Liver (1kg)",
-    "category": "Meat",
-    "price": 3000,
-    "img": "https://source.unsplash.com/800x600/?liver"
-  },
-  {
-    "id": 1012,
-    "title": "Beef Ribs (1kg)",
-    "category": "Meat",
-    "price": 4000,
-    "img": "https://source.unsplash.com/800x600/?beef-ribs"
-  },
-  {
-    "id": 1014,
-    "title": "Fresh Goat Meat (1kg)",
-    "category": "Meat",
-    "price": 3800,
-    "img": "https://source.unsplash.com/800x600/?goat-meat"
-  },
-  {
-    "id": 1015,
-    "title": "Roasted Goat (Brochette) per stick",
-    "category": "Meat",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?brochette",
-    "popular": true
-  },
-  {
-    "id": 1016,
-    "title": "Goat Liver (1kg)",
-    "category": "Meat",
-    "price": 3000,
-    "img": "https://source.unsplash.com/800x600/?goat-liver"
-  },
-  {
-    "id": 1018,
-    "title": "Fresh Mutton (1kg)",
-    "category": "Meat",
-    "price": 4500,
-    "img": "https://source.unsplash.com/800x600/?mutton"
-  },
-  {
-    "id": 1019,
-    "title": "Mutton Ribs (1kg)",
-    "category": "Meat",
-    "price": 5000,
-    "img": "https://source.unsplash.com/800x600/?mutton-ribs"
-  },
-  {
-    "id": 1021,
-    "title": "Local Chicken (Free-range)",
-    "category": "Meat",
-    "price": 6000,
-    "img": "https://source.unsplash.com/800x600/?chicken",
-    "popular": true
-  },
-  {
-    "id": 1022,
-    "title": "Broiler Chicken",
-    "category": "Meat",
-    "price": 4500,
-    "img": "https://source.unsplash.com/800x600/?broiler-chicken"
-  },
-  {
-    "id": 1023,
-    "title": "Chicken Wings (1kg)",
-    "category": "Meat",
-    "price": 3500,
-    "img": "https://source.unsplash.com/800x600/?chicken-wings"
-  },
-  {
-    "id": 1024,
-    "title": "Chicken Legs (1kg)",
-    "category": "Meat",
-    "price": 3800,
-    "img": "https://source.unsplash.com/800x600/?chicken-legs"
-  },
-  {
-    "id": 1026,
-    "title": "Fresh Pork (1kg)",
-    "category": "Meat",
-    "price": 3800,
-    "img": "https://source.unsplash.com/800x600/?pork"
-  },
-  {
-    "id": 1027,
-    "title": "Pork Ribs (1kg)",
-    "category": "Meat",
-    "price": 4000,
-    "img": "https://source.unsplash.com/800x600/?pork-ribs"
-  },
-  {
-    "id": 1028,
-    "title": "Sausages (a pack)",
-    "category": "Meat",
-    "price": 2500,
-    "img": "https://source.unsplash.com/800x600/?sausages",
-    "popular": true
-  },
-  {
-    "id": 1029,
-    "title": "Bacon (1kg)",
-    "category": "Meat",
-    "price": 5000,
-    "img": "https://source.unsplash.com/800x600/?bacon"
-  },
-  {
-    "id": 1031,
-    "title": "Tilapia (1kg)",
-    "category": "Meat",
-    "price": 4000,
-    "img": "https://source.unsplash.com/800x600/?tilapia"
-  },
-  {
-    "id": 1032,
-    "title": "Nile Perch (1kg)",
-    "category": "Meat",
-    "price": 5000,
-    "img": "https://source.unsplash.com/800x600/?nile-perch"
-  },
-  {
-    "id": 1033,
-    "title": "Sardines/ Isambaza (1kg)",
-    "category": "Meat",
-    "price": 2500,
-    "img": "https://source.unsplash.com/800x600/?sardines"
-  },
-  {
-    "id": 1034,
-    "title": "Smoked Fish (1kg)",
-    "category": "Meat",
-    "price": 3500,
-    "img": "https://source.unsplash.com/800x600/?smoked-fish"
-  },
-
-  // Fruits & Vegetables
-  {
-    "id": 1036,
-    "title": "Carrot (1kg)",
-    "category": "Fruits & Vegetables",
-    "price": 800,
-    "img": "https://source.unsplash.com/800x600/?carrot",
-    "popular": true
-  },
-  {
-    "id": 1037,
-    "title": "Cabbage (1)",
-    "category": "Fruits & Vegetables",
-    "price": 1000,
-    "img": "https://source.unsplash.com/800x600/?cabbage"
-  },
-  {
-    "id": 1038,
-    "title": "Onion (1kg)",
-    "category": "Fruits & Vegetables",
-    "price": 1200,
-    "img": "https://source.unsplash.com/800x600/?onion"
-  },
-  {
-    "id": 1039,
-    "title": "Tomato (1kg)",
-    "category": "Fruits & Vegetables",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?tomato",
-    "popular": true
-  },
-  {
-    "id": 1040,
-    "title": "Green Pepper (1kg)",
-    "category": "Fruits & Vegetables",
-    "price": 1000,
-    "img": "https://source.unsplash.com/800x600/?green-pepper"
-  },
-  {
-    "id": 1041,
-    "title": "Eggplant (1kg)",
-    "category": "Fruits & Vegetables",
-    "price": 1000,
-    "img": "https://source.unsplash.com/800x600/?eggplant"
-  },
-  {
-    "id": 1042,
-    "title": "Spinach (1 bunch)",
-    "category": "Fruits & Vegetables",
-    "price": 800,
-    "img": "https://source.unsplash.com/800x600/?spinach"
-  },
-  {
-    "id": 1043,
-    "title": "Lettuce (1 bunch)",
-    "category": "Fruits & Vegetables",
-    "price": 1200,
-    "img": "https://source.unsplash.com/800x600/?lettuce"
-  },
-  {
-    "id": 1044,
-    "title": "Cucumber (each)",
-    "category": "Fruits & Vegetables",
-    "price": 800,
-    "img": "https://source.unsplash.com/800x600/?cucumber"
-  },
-  {
-    "id": 1045,
-    "title": "Garlic (250g)",
-    "category": "Fruits & Vegetables",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?garlic"
-  },
-  {
-    "id": 1046,
-    "title": "Ginger (250g)",
-    "category": "Fruits & Vegetables",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?ginger"
-  },
-  {
-    "id": 1050,
-    "title": "Pumpkin (each)",
-    "category": "Fruits & Vegetables",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?pumpkin"
-  },
-  {
-    "id": 1052,
-    "title": "Apple (each)",
-    "category": "Fruits & Vegetables",
-    "price": 500,
-    "img": "https://source.unsplash.com/800x600/?apple",
-    "popular": true
-  },
-  {
-    "id": 1053,
-    "title": "Banana (1 bunch)",
-    "category": "Fruits & Vegetables",
-    "price": 1000,
-    "img": "https://source.unsplash.com/800x600/?banana"
-  },
-  {
-    "id": 1054,
-    "title": "Orange (each)",
-    "category": "Fruits & Vegetables",
-    "price": 400,
-    "img": "https://source.unsplash.com/800x600/?orange"
-  },
-  {
-    "id": 1055,
-    "title": "Mango (each)",
-    "category": "Fruits & Vegetables",
-    "price": 800,
-    "img": "https://source.unsplash.com/800x600/?mango",
-    "popular": true
-  },
-  {
-    "id": 1056,
-    "title": "Pineapple (each)",
-    "category": "Fruits & Vegetables",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?pineapple"
-  },
-  {
-    "id": 1057,
-    "title": "Papaya (each)",
-    "category": "Fruits & Vegetables",
-    "price": 1200,
-    "img": "https://source.unsplash.com/800x600/?papaya"
-  },
-  {
-    "id": 1058,
-    "title": "Watermelon (each)",
-    "category": "Fruits & Vegetables",
-    "price": 2500,
-    "img": "https://source.unsplash.com/800x600/?watermelon"
-  },
-  {
-    "id": 1059,
-    "title": "Avocado (each)",
-    "category": "Fruits & Vegetables",
-    "price": 600,
-    "img": "https://source.unsplash.com/800x600/?avocado"
-  },
-  {
-    "id": 1060,
-    "title": "Passion Fruit (1kg)",
-    "category": "Fruits & Vegetables",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?passion-fruit"
-  },
-  {
-    "id": 1061,
-    "title": "Lemon (each)",
-    "category": "Fruits & Vegetables",
-    "price": 400,
-    "img": "https://source.unsplash.com/800x600/?lemon"
-  },
-  {
-    "id": 1062,
-    "title": "Grapes (1kg)",
-    "category": "Fruits & Vegetables",
-    "price": 4000,
-    "img": "https://source.unsplash.com/800x600/?grapes"
-  },
-  {
-    "id": 1063,
-    "title": "Strawberry (1 pack)",
-    "category": "Fruits & Vegetables",
-    "price": 2500,
-    "img": "https://source.unsplash.com/800x600/?strawberry"
-  },
-  {
-    "id": 1064,
-    "title": "Pomegranate (each)",
-    "category": "Fruits & Vegetables",
-    "price": 2000,
-    "img": "https://source.unsplash.com/800x600/?pomegranate"
-  },
-  {
-    "id": 1065,
-    "title": "Guava (each)",
-    "category": "Fruits & Vegetables",
-    "price": 700,
-    "img": "https://source.unsplash.com/800x600/?guava"
-  },
-  {
-    "id": 1066,
-    "title": "Kiwi (each)",
-    "category": "Fruits & Vegetables",
-    "price": 800,
-    "img": "https://source.unsplash.com/800x600/?kiwi"
-  },
-  {
-    "id": 1067,
-    "title": "Coconut (each)",
-    "category": "Fruits & Vegetables",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?coconut"
-  },
-  {
-    "id": 1068,
-    "title": "Sugarcane (1 piece)",
-    "category": "Fruits & Vegetables",
-    "price": 500,
-    "img": "https://source.unsplash.com/800x600/?sugarcane"
-  },
-  {
-    "id": 1069,
-    "title": "Pear (each)",
-    "category": "Fruits & Vegetables",
-    "price": 600,
-    "img": "https://source.unsplash.com/800x600/?pear"
-  },
-  {
-    "id": 1070,
-    "title": "Plum (each)",
-    "category": "Fruits & Vegetables",
-    "price": 1200,
-    "img": "https://source.unsplash.com/800x600/?plum"
-  },
-
-  // Drinks
-  {
-    "id": 1072,
-    "title": "Beone Gin",
-    "category": "Drinks",
-    "price": 1800,
-    "img": "https://source.unsplash.com/800x600/?gin",
-    "sub": "Alcoholic",
-    "popular": true
-  },
-  {
-    "id": 1073,
-    "title": "Rabiant",
-    "category": "Drinks",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?alcohol",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1074,
-    "title": "Mambo",
-    "category": "Drinks",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?drink",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1075,
-    "title": "Rack Gin",
-    "category": "Drinks",
-    "price": 2300,
-    "img": "https://source.unsplash.com/800x600/?rack-gin",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1076,
-    "title": "Fimbo",
-    "category": "Drinks",
-    "price": 1700,
-    "img": "https://source.unsplash.com/800x600/?fimbo",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1077,
-    "title": "Big Konyagi",
-    "category": "Drinks",
-    "price": 7500,
-    "img": "https://source.unsplash.com/800x600/?konyagi",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1078,
-    "title": "Small Konyagi",
-    "category": "Drinks",
-    "price": 2800,
-    "img": "https://source.unsplash.com/800x600/?small-konyagi",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1079,
-    "title": "Big Boss",
-    "category": "Drinks",
-    "price": 4000,
-    "img": "https://source.unsplash.com/800x600/?big-boss",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1080,
-    "title": "Small Boss",
-    "category": "Drinks",
-    "price": 2300,
-    "img": "https://source.unsplash.com/800x600/?small-boss",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1081,
-    "title": "Bond 7",
-    "category": "Drinks",
-    "price": 3500,
-    "img": "https://source.unsplash.com/800x600/?bond-7",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1083,
-    "title": "Wine",
-    "category": "Drinks",
-    "price": 15000,
-    "img": "https://source.unsplash.com/800x600/?wine",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1084,
-    "title": "Bavaria",
-    "category": "Drinks",
-    "price": 3000,
-    "img": "https://source.unsplash.com/800x600/?bavaria",
-    "sub": "Non-Alcoholic"
-  },
-  {
-    "id": 1085,
-    "title": "Smirnoff Ice",
-    "category": "Drinks",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?smirnoff",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1086,
-    "title": "Agasusuruko",
-    "category": "Drinks",
-    "price": 1200,
-    "img": "https://source.unsplash.com/800x600/?agasusuruko",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1087,
-    "title": "Tuiste Yatangawize",
-    "category": "Drinks",
-    "price": 500,
-    "img": "https://source.unsplash.com/800x600/?tuiste",
-    "sub": "Non-Alcoholic"
-  },
-  {
-    "id": 1089,
-    "title": "Amstel",
-    "category": "Drinks",
-    "price": 2000,
-    "img": "https://source.unsplash.com/800x600/?amstel",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1090,
-    "title": "Turbo",
-    "category": "Drinks",
-    "price": 2000,
-    "img": "https://source.unsplash.com/800x600/?turbo",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1091,
-    "title": "Small Primus",
-    "category": "Drinks",
-    "price": 2000,
-    "img": "https://source.unsplash.com/800x600/?primus",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1092,
-    "title": "Big Primus",
-    "category": "Drinks",
-    "price": 2500,
-    "img": "https://source.unsplash.com/800x600/?big-primus",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1093,
-    "title": "Petit Skol Malt",
-    "category": "Drinks",
-    "price": 2000,
-    "img": "https://source.unsplash.com/800x600/?skol-malt",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1094,
-    "title": "Big Skol Malt",
-    "category": "Drinks",
-    "price": 2500,
-    "img": "https://source.unsplash.com/800x600/?big-skol",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1095,
-    "title": "Big Skol Gatanu",
-    "category": "Drinks",
-    "price": 2500,
-    "img": "https://source.unsplash.com/800x600/?skol-gatanu",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1096,
-    "title": "Big Primus",
-    "category": "Drinks",
-    "price": 2500,
-    "img": "https://source.unsplash.com/800x600/?primus-beer",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1097,
-    "title": "Petit Miitzing",
-    "category": "Drinks",
-    "price": 2000,
-    "img": "https://source.unsplash.com/800x600/?miitzing",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1098,
-    "title": "Big Miitzing",
-    "category": "Drinks",
-    "price": 2500,
-    "img": "https://source.unsplash.com/800x600/?big-miitzing",
-    "sub": "Alcoholic"
-  },
-  {
-    "id": 1100,
-    "title": "Novida",
-    "category": "Drinks",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?novida",
-    "sub": "Non-Alcoholic"
-  },
-  {
-    "id": 1101,
-    "title": "Coca-cola",
-    "category": "Drinks",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?coca-cola",
-    "sub": "Non-Alcoholic",
-    "popular": true
-  },
-  {
-    "id": 1102,
-    "title": "Energy Drink",
-    "category": "Drinks",
-    "price": 800,
-    "img": "https://source.unsplash.com/800x600/?energy-drink",
-    "sub": "Non-Alcoholic"
-  },
-  {
-    "id": 1103,
-    "title": "Pineapple Juice",
-    "category": "Drinks",
-    "price": 700,
-    "img": "https://source.unsplash.com/800x600/?pineapple-juice",
-    "sub": "Non-Alcoholic"
-  },
-  {
-    "id": 1104,
-    "title": "Mixed Fruit Juice",
-    "category": "Drinks",
-    "price": 2000,
-    "img": "https://source.unsplash.com/800x600/?fruit-juice",
-    "sub": "Non-Alcoholic"
-  },
-  {
-    "id": 1105,
-    "title": "Mango Juice",
-    "category": "Drinks",
-    "price": 1500,
-    "img": "https://source.unsplash.com/800x600/?mango-juice",
-    "sub": "Non-Alcoholic"
-  },
-  {
-    "id": 1106,
-    "title": "Big Bottle of Water",
-    "category": "Drinks",
-    "price": 1200,
-    "img": "https://source.unsplash.com/800x600/?water-bottle",
-    "sub": "Non-Alcoholic"
-  },
-  {
-    "id": 1107,
-    "title": "Small Bottle of Water",
-    "category": "Drinks",
-    "price": 700,
-    "img": "https://source.unsplash.com/800x600/?small-water",
-    "sub": "Non-Alcoholic"
-  }
-];
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
 
 // Shopping Cart Management
 let cart = JSON.parse(localStorage.getItem('freshdrop_cart')) || {};
@@ -737,6 +23,9 @@ let currentSearchTerm = '';
 let currentProducts = [];
 let productsPerPage = 12;
 let currentPage = 1;
+
+// Current User
+let currentUser = null;
 
 // DOM Elements
 const cartIcon = document.getElementById('cartIcon');
@@ -757,6 +46,65 @@ const categoryFilters = document.querySelectorAll('.category-filter');
 const loadMoreBtn = document.getElementById('loadMoreBtn');
 const loadMoreContainer = document.getElementById('loadMoreContainer');
 
+// Auth Elements
+const authButtons = document.getElementById('authButtons');
+const userMenuWrapper = document.getElementById('userMenuWrapper');
+const userDropdownBtn = document.getElementById('userDropdownBtn');
+const userDropdown = document.getElementById('userDropdown');
+const userDisplayName = document.getElementById('userDisplayName');
+const dropdownUserName = document.getElementById('dropdownUserName');
+const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+const dropdownAccount = document.getElementById('dropdownAccount');
+const dropdownOrders = document.getElementById('dropdownOrders');
+const dropdownLogout = document.getElementById('dropdownLogout');
+
+const loginBtn = document.getElementById('loginBtn');
+const signupBtn = document.getElementById('signupBtn');
+const loginModal = document.getElementById('loginModal');
+const signupModal = document.getElementById('signupModal');
+const accountModal = document.getElementById('accountModal');
+const loginForm = document.getElementById('loginForm');
+const signupForm = document.getElementById('signupForm');
+const showSignup = document.getElementById('showSignup');
+const showLogin = document.getElementById('showLogin');
+
+// Social Login Elements
+const googleLogin = document.getElementById('googleLogin');
+const facebookLogin = document.getElementById('facebookLogin');
+const googleSignup = document.getElementById('googleSignup');
+const facebookSignup = document.getElementById('facebookSignup');
+
+// Mobile Auth Elements
+const mobileAuthSection = document.getElementById('mobileAuthSection');
+const mobileUserSection = document.getElementById('mobileUserSection');
+const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+const mobileSignupBtn = document.getElementById('mobileSignupBtn');
+const mobileUserName = document.getElementById('mobileUserName');
+const mobileUserEmail = document.getElementById('mobileUserEmail');
+const mobileAccountLink = document.getElementById('mobileAccountLink');
+const mobileOrdersLink = document.getElementById('mobileOrdersLink');
+const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+
+// Account Elements
+const userName = document.getElementById('userName');
+const userEmail = document.getElementById('userEmail');
+const userPhone = document.getElementById('userPhone');
+const totalOrders = document.getElementById('totalOrders');
+const pendingOrders = document.getElementById('pendingOrders');
+const completedOrders = document.getElementById('completedOrders');
+const ordersList = document.getElementById('ordersList');
+const accountLogout = document.getElementById('accountLogout');
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+
+// Payment Elements
+const paymentModal = document.getElementById('paymentModal');
+const orderItemsSummary = document.getElementById('orderItemsSummary');
+const orderTotalSummary = document.getElementById('orderTotalSummary');
+const deliveryAddress = document.getElementById('deliveryAddress');
+const deliveryNotes = document.getElementById('deliveryNotes');
+const confirmPayment = document.getElementById('confirmPayment');
+
 // Mobile Menu Elements
 const mobileMenu = document.getElementById('mobileMenu');
 const closeMobileMenu = document.getElementById('closeMobileMenu');
@@ -765,7 +113,542 @@ const mobileCategoryLinks = document.querySelectorAll('.mobile-category-link');
 
 // About Modal Elements
 const aboutModal = document.getElementById('aboutModal');
-const closeAboutModal = document.getElementById('closeAboutModal');
+
+// Replace the PRODUCTS array with empty array
+const PRODUCTS = [];
+
+// Test Firebase connection
+async function testFirebaseConnection() {
+  try {
+    console.log("Testing Firebase connection...");
+    const testDoc = await db.collection('products').limit(1).get();
+    console.log("✅ Firebase connection successful!");
+    return true;
+  } catch (error) {
+    console.error("❌ Firebase connection failed:", error);
+    showNotification('Cannot connect to database');
+    return false;
+  }
+}
+
+// Load products from Firebase
+async function loadProductsFromFirebase() {
+  try {
+    console.log("🔄 Loading products from Firebase...");
+    const snapshot = await db.collection('products').get();
+    PRODUCTS.length = 0; // Clear array
+    
+    console.log(`✅ Found ${snapshot.size} products`);
+    
+    if (snapshot.empty) {
+      console.log("❌ No products found in Firestore");
+      showNotification('No products available');
+      return;
+    }
+    
+    snapshot.forEach(doc => {
+      const productData = doc.data();
+      PRODUCTS.push({
+        id: doc.id,
+        ...productData
+      });
+    });
+    
+    console.log("📦 Products loaded successfully");
+    updateProductDisplay();
+    
+  } catch (error) {
+    console.error('❌ Error loading products:', error);
+    showNotification('Error loading products. Check console for details.');
+  }
+}
+
+// Authentication Functions
+function initAuth() {
+  // Auth state listener
+  auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      currentUser = user;
+      console.log("👤 User signed in:", user.email);
+      await updateUserProfile(user);
+      showUserMenu();
+    } else {
+      currentUser = null;
+      console.log("👤 No user signed in");
+      showAuthButtons();
+    }
+  });
+
+  // User dropdown functionality
+  userDropdownBtn.addEventListener('click', toggleUserDropdown);
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!userMenuWrapper.contains(e.target)) {
+      userDropdown.classList.remove('active');
+      userDropdownBtn.classList.remove('active');
+    }
+  });
+
+  // Dropdown item clicks
+  dropdownAccount.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleModal('accountModal');
+    userDropdown.classList.remove('active');
+    userDropdownBtn.classList.remove('active');
+  });
+
+  dropdownOrders.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleModal('accountModal');
+    // Switch to orders tab
+    setTimeout(() => {
+      document.querySelector('[data-tab="orders"]').click();
+    }, 100);
+    userDropdown.classList.remove('active');
+    userDropdownBtn.classList.remove('active');
+  });
+
+  dropdownLogout.addEventListener('click', (e) => {
+    e.preventDefault();
+    handleLogout();
+  });
+
+  // Auth event listeners
+  loginBtn.addEventListener('click', () => toggleModal('loginModal'));
+  signupBtn.addEventListener('click', () => toggleModal('signupModal'));
+
+  // Mobile auth events
+  mobileLoginBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleModal('loginModal');
+    closeMobileMenuFunction();
+  });
+  mobileSignupBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleModal('signupModal');
+    closeMobileMenuFunction();
+  });
+  mobileAccountLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleModal('accountModal');
+    closeMobileMenuFunction();
+  });
+  mobileOrdersLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleModal('accountModal');
+    closeMobileMenuFunction();
+    setTimeout(() => {
+      document.querySelector('[data-tab="orders"]').click();
+    }, 100);
+  });
+  mobileLogoutBtn.addEventListener('click', handleLogout);
+  accountLogout.addEventListener('click', handleLogout);
+
+  // Form submissions
+  loginForm.addEventListener('submit', handleLogin);
+  signupForm.addEventListener('submit', handleSignup);
+
+  // Auth modal switches
+  showSignup.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleModal('loginModal');
+    toggleModal('signupModal');
+  });
+  showLogin.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleModal('signupModal');
+    toggleModal('loginModal');
+  });
+
+  // Social login handlers
+  googleLogin.addEventListener('click', () => handleSocialLogin('google'));
+  facebookLogin.addEventListener('click', () => handleSocialLogin('facebook'));
+  googleSignup.addEventListener('click', () => handleSocialLogin('google'));
+  facebookSignup.addEventListener('click', () => handleSocialLogin('facebook'));
+}
+
+function toggleUserDropdown() {
+  userDropdown.classList.toggle('active');
+  userDropdownBtn.classList.toggle('active');
+}
+
+async function handleSocialLogin(provider) {
+  try {
+    let authProvider;
+    
+    if (provider === 'google') {
+      authProvider = new firebase.auth.GoogleAuthProvider();
+    } else if (provider === 'facebook') {
+      authProvider = new firebase.auth.FacebookAuthProvider();
+    }
+    
+    const result = await auth.signInWithPopup(authProvider);
+    const user = result.user;
+    
+    // Save user profile if it's their first time
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    if (!userDoc.exists) {
+      await db.collection('users').doc(user.uid).set({
+        name: user.displayName || 'User',
+        email: user.email,
+        phone: user.phoneNumber || '',
+        photoURL: user.photoURL || '',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+    
+    showNotification(`Welcome${user.displayName ? ' ' + user.displayName : ''}!`);
+    toggleModal('loginModal');
+    toggleModal('signupModal');
+    
+  } catch (error) {
+    console.error('Social login error:', error);
+    showNotification(error.message);
+  }
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  
+  try {
+    const result = await auth.signInWithEmailAndPassword(email, password);
+    showNotification('Welcome back!');
+    toggleModal('loginModal');
+    loginForm.reset();
+  } catch (error) {
+    console.error('Login error:', error);
+    showNotification(error.message);
+  }
+}
+
+async function handleSignup(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('signupName').value;
+  const email = document.getElementById('signupEmail').value;
+  const phone = document.getElementById('signupPhone').value;
+  const password = document.getElementById('signupPassword').value;
+  
+  try {
+    const result = await auth.createUserWithEmailAndPassword(email, password);
+    
+    // Save user profile
+    await db.collection('users').doc(result.user.uid).set({
+      name: name,
+      email: email,
+      phone: phone,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    showNotification('Account created successfully!');
+    toggleModal('signupModal');
+    signupForm.reset();
+  } catch (error) {
+    console.error('Signup error:', error);
+    showNotification(error.message);
+  }
+}
+
+async function handleLogout() {
+  try {
+    await auth.signOut();
+    showNotification('Logged out successfully');
+    closeMobileMenuFunction();
+    toggleModal('accountModal');
+    userDropdown.classList.remove('active');
+    userDropdownBtn.classList.remove('active');
+  } catch (error) {
+    console.error('Logout error:', error);
+    showNotification('Error logging out');
+  }
+}
+
+async function updateUserProfile(user) {
+  try {
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+      
+      // Update desktop dropdown
+      userDisplayName.textContent = userData.name || 'User';
+      dropdownUserName.textContent = userData.name || 'User';
+      dropdownUserEmail.textContent = userData.email;
+      
+      // Update mobile menu
+      mobileUserName.textContent = userData.name || 'User';
+      mobileUserEmail.textContent = userData.email;
+      
+      // Update account modal
+      userName.textContent = userData.name || 'User';
+      userEmail.textContent = userData.email;
+      userPhone.textContent = userData.phone || 'Not provided';
+    }
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+  }
+}
+
+function showUserMenu() {
+  authButtons.style.display = 'none';
+  userMenuWrapper.style.display = 'block';
+  mobileAuthSection.style.display = 'none';
+  mobileUserSection.style.display = 'block';
+}
+
+function showAuthButtons() {
+  authButtons.style.display = 'flex';
+  userMenuWrapper.style.display = 'none';
+  mobileAuthSection.style.display = 'block';
+  mobileUserSection.style.display = 'none';
+}
+
+// Payment Functions
+function initPayment() {
+  checkoutBtn.addEventListener('click', handleCheckout);
+  confirmPayment.addEventListener('click', processPayment);
+}
+
+function handleCheckout() {
+  if (Object.keys(cart).length === 0) {
+    showNotification('Your cart is empty');
+    return;
+  }
+  
+  if (!currentUser) {
+    showNotification('Please login to checkout');
+    toggleModal('loginModal');
+    return;
+  }
+  
+  // Show payment modal
+  showPaymentSummary();
+  toggleModal('paymentModal');
+  toggleCart();
+}
+
+function showPaymentSummary() {
+  orderItemsSummary.innerHTML = '';
+  
+  let total = 0;
+  
+  Object.values(cart).forEach(item => {
+    const itemTotal = item.price * item.quantity;
+    total += itemTotal;
+    
+    const itemElement = document.createElement('div');
+    itemElement.className = 'order-item-summary';
+    itemElement.innerHTML = `
+      <span class="name">${item.title}</span>
+      <span class="quantity">Qty: ${item.quantity}</span>
+      <span class="price">${formatCurrency(itemTotal)}</span>
+    `;
+    
+    orderItemsSummary.appendChild(itemElement);
+  });
+  
+  orderTotalSummary.textContent = formatCurrency(total);
+}
+
+async function processPayment() {
+  if (!deliveryAddress.value.trim()) {
+    showNotification('Please enter delivery address');
+    deliveryAddress.focus();
+    return;
+  }
+  
+  const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+  const totalAmount = Object.values(cart).reduce((total, item) => total + (item.price * item.quantity), 0);
+  
+  try {
+    showNotification('Processing your order...');
+    
+    const order = {
+      userId: currentUser.uid,
+      customer: {
+        name: currentUser.displayName || dropdownUserName.textContent,
+        email: currentUser.email,
+        phone: document.getElementById('userPhone').textContent
+      },
+      items: cart,
+      total: totalAmount,
+      paymentMethod: paymentMethod,
+      deliveryAddress: deliveryAddress.value,
+      deliveryNotes: deliveryNotes.value,
+      status: 'confirmed',
+      orderNumber: generateOrderNumber(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    await db.collection('orders').add(order);
+    
+    showNotification('Order placed successfully! We will contact you soon.');
+    
+    // Clear cart and close modals
+    cart = {};
+    localStorage.setItem('freshdrop_cart', JSON.stringify(cart));
+    updateCartCount();
+    updateCartDisplay();
+    toggleModal('paymentModal');
+    deliveryAddress.value = '';
+    deliveryNotes.value = '';
+    
+  } catch (error) {
+    console.error('Payment error:', error);
+    showNotification('Payment failed. Please try again.');
+  }
+}
+
+// Account and Orders Functions
+async function loadUserOrders() {
+  if (!currentUser) return;
+  
+  ordersList.innerHTML = `
+    <div class="loading-orders">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>Loading your orders...</p>
+    </div>
+  `;
+  
+  try {
+    const ordersSnapshot = await db.collection('orders')
+      .where('userId', '==', currentUser.uid)
+      .orderBy('createdAt', 'desc')
+      .get();
+    
+    if (ordersSnapshot.empty) {
+      ordersList.innerHTML = `
+        <div class="no-orders">
+          <i class="fas fa-shopping-bag"></i>
+          <h3>No orders yet</h3>
+          <p>Start shopping to see your orders here</p>
+        </div>
+      `;
+      updateOrderStats(0, 0, 0);
+      return;
+    }
+    
+    let total = 0;
+    let pending = 0;
+    let completed = 0;
+    
+    ordersList.innerHTML = '';
+    
+    ordersSnapshot.forEach(doc => {
+      const order = doc.data();
+      const orderElement = createOrderElement(order, doc.id);
+      ordersList.appendChild(orderElement);
+      
+      total++;
+      if (order.status === 'completed') completed++;
+      if (['pending', 'confirmed', 'preparing', 'delivering'].includes(order.status)) pending++;
+    });
+    
+    updateOrderStats(total, pending, completed);
+    
+  } catch (error) {
+    console.error('Error loading orders:', error);
+    ordersList.innerHTML = `
+      <div class="no-orders">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h3>Error loading orders</h3>
+        <p>Please try again later</p>
+      </div>
+    `;
+  }
+}
+
+function createOrderElement(order, orderId) {
+  const orderElement = document.createElement('div');
+  orderElement.className = 'order-item';
+  
+  const orderDate = order.createdAt ? order.createdAt.toDate().toLocaleDateString() : 'N/A';
+  const statusClass = `status-${order.status}`;
+  
+  orderElement.innerHTML = `
+    <div class="order-header">
+      <div class="order-info">
+        <h4>Order #${order.orderNumber}</h4>
+        <div class="order-meta">
+          <span>Placed on ${orderDate}</span>
+          <span> • </span>
+          <span>Total: ${formatCurrency(order.total)}</span>
+        </div>
+      </div>
+      <div class="order-status ${statusClass}">${order.status}</div>
+    </div>
+    <div class="order-items">
+      ${Object.values(order.items).map(item => `
+        <div class="order-item-row">
+          <span class="order-item-name">${item.title}</span>
+          <span class="order-item-quantity">Qty: ${item.quantity}</span>
+          <span class="order-item-price">${formatCurrency(item.price * item.quantity)}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="order-total">
+      <span>Total Amount:</span>
+      <span>${formatCurrency(order.total)}</span>
+    </div>
+  `;
+  
+  return orderElement;
+}
+
+function updateOrderStats(total, pending, completed) {
+  totalOrders.textContent = total;
+  pendingOrders.textContent = pending;
+  completedOrders.textContent = completed;
+}
+
+function generateOrderNumber() {
+  const timestamp = Date.now();
+  const random = Math.floor(Math.random() * 1000);
+  return `FRESH-${timestamp}-${random}`;
+}
+
+// Modal Management
+function toggleModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.classList.toggle('active');
+  overlay.classList.toggle('active');
+  document.body.style.overflow = modal.classList.contains('active') ? 'hidden' : '';
+}
+
+// Update all modal close buttons
+document.querySelectorAll('.close-modal').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const modalId = this.getAttribute('data-modal');
+    toggleModal(modalId);
+  });
+});
+
+// Tab functionality
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', function() {
+    const tabId = this.getAttribute('data-tab');
+    
+    // Update active tab
+    tabBtns.forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    
+    // Show active content
+    tabContents.forEach(content => {
+      content.classList.remove('active');
+      if (content.id === `${tabId}Tab`) {
+        content.classList.add('active');
+      }
+    });
+    
+    // Load orders if orders tab is active
+    if (tabId === 'orders') {
+      loadUserOrders();
+    }
+  });
+});
 
 // Format currency
 function formatCurrency(amount) {
@@ -1151,7 +1034,23 @@ function toggleAboutModal() {
 }
 
 // Initialize app
-function initApp() {
+async function initApp() {
+  console.log("🚀 Initializing Fresh Drop Rwanda app...");
+  
+  // Initialize authentication
+  initAuth();
+  
+  // Initialize payment system
+  initPayment();
+  
+  // Test Firebase connection first
+  const connected = await testFirebaseConnection();
+  
+  if (connected) {
+    // Load products from Firebase
+    await loadProductsFromFirebase();
+  }
+  
   // Load initial cart state
   updateCartCount();
   updateCartDisplay();
@@ -1191,19 +1090,6 @@ function initApp() {
   
   // Load more button
   loadMoreBtn.addEventListener('click', loadMoreProducts);
-  
-  checkoutBtn.addEventListener('click', () => {
-    if (Object.keys(cart).length === 0) {
-      showNotification('Your cart is empty');
-      return;
-    }
-    
-    // In a real app, this would redirect to checkout
-    showNotification('Proceeding to checkout...');
-    setTimeout(() => {
-      showNotification('Checkout functionality would be implemented here');
-    }, 1000);
-  });
   
   // Header scroll effect
   window.addEventListener('scroll', () => {
@@ -1310,8 +1196,6 @@ function initApp() {
     });
   });
 
-  closeAboutModal.addEventListener('click', toggleAboutModal);
-
   // Footer category links
   document.querySelectorAll('.footer-links a[data-category]').forEach(link => {
     link.addEventListener('click', (e) => {
@@ -1350,6 +1234,18 @@ function initApp() {
     }
     if (aboutModal.classList.contains('active')) {
       toggleAboutModal();
+    }
+    if (loginModal.classList.contains('active')) {
+      toggleModal('loginModal');
+    }
+    if (signupModal.classList.contains('active')) {
+      toggleModal('signupModal');
+    }
+    if (accountModal.classList.contains('active')) {
+      toggleModal('accountModal');
+    }
+    if (paymentModal.classList.contains('active')) {
+      toggleModal('paymentModal');
     }
   });
   
@@ -1398,6 +1294,22 @@ function initApp() {
       }
       if (aboutModal.classList.contains('active')) {
         toggleAboutModal();
+      }
+      if (loginModal.classList.contains('active')) {
+        toggleModal('loginModal');
+      }
+      if (signupModal.classList.contains('active')) {
+        toggleModal('signupModal');
+      }
+      if (accountModal.classList.contains('active')) {
+        toggleModal('accountModal');
+      }
+      if (paymentModal.classList.contains('active')) {
+        toggleModal('paymentModal');
+      }
+      if (userDropdown.classList.contains('active')) {
+        userDropdown.classList.remove('active');
+        userDropdownBtn.classList.remove('active');
       }
     }
   });

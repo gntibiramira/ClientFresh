@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Import Products</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <h2>Product Import Tool</h2>
+    <button onclick="importProducts()">Import Products</button>
+    <button onclick="testConnection()">Test Firebase Connection</button>
+    <div id="log" style="border: 1px solid #ccc; padding: 10px; margin: 10px 0; height: 300px; overflow: auto;"></div>
+
+    
+
+    <script>
+        // Your Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDi35okgsN4YgBxCHi5jgRtF20Dd2X8PFc",
+			authDomain: "fresh-drop-rwanda-ad11f.firebaseapp.com",
+			projectId: "fresh-drop-rwanda-ad11f",
+			storageBucket: "fresh-drop-rwanda-ad11f.firebasestorage.app",
+			messagingSenderId: "1045979954241",
+			appId: "1:1045979954241:web:3663d006c3ae9ae62bdac0"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Your products data
+        const products = [
+  // Organic & Animal-based Fresh Foods
+  {
+    "id": 1000,
+    "title": "Beans (1kg)",
+    "category": "Organic & Animal-based Fresh Foods",
+    "price": 1200,
+    "img": "https://source.unsplash.com/800x600/?beans",
+    "popular": true
+  },
+  {
+    "id": 1001,
+    "title": "Maize/Corn (1kg)",
+    "category": "Organic & Animal-based Fresh Foods",
+    "price": 800,
+    "img": "https://source.unsplash.com/800x600/?corn",
+    "popular": true
+  },
+  {
+    "id": 1002,
+    "title": "Soybean (1kg)",
+    "category": "Organic & Animal-based Fresh Foods",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?soybean"
+  },
+  {
+    "id": 1003,
+    "title": "Groundnuts/Peanuts (1kg)",
+    "category": "Organic & Animal-based Fresh Foods",
+    "price": 1800,
+    "img": "https://source.unsplash.com/800x600/?peanuts"
+  },
+  {
+    "id": 1004,
+    "title": "Rice (1kg)",
+    "category": "Organic & Animal-based Fresh Foods",
+    "price": 2000,
+    "img": "https://source.unsplash.com/800x600/?rice",
+    "popular": true
+  },
+  {
+    "id": 1005,
+    "title": "Sorghum (1kg)",
+    "category": "Organic & Animal-based Fresh Foods",
+    "price": 1000,
+    "img": "https://source.unsplash.com/800x600/?sorghum"
+  },
+  {
+    "id": 1006,
+    "title": "Millet (1kg)",
+    "category": "Organic & Animal-based Fresh Foods",
+    "price": 1200,
+    "img": "https://source.unsplash.com/800x600/?millet"
+  },
+  {
+    "id": 1047,
+    "title": "Irish Potato (1kg)",
+    "category": "Organic & Animal-based Fresh Foods",
+    "price": 1200,
+    "img": "https://source.unsplash.com/800x600/?potato",
+    "popular": true
+  },
+  {
+    "id": 1048,
+    "title": "Sweet Potato (1kg)",
+    "category": "Organic & Animal-based Fresh Foods",
+    "price": 1000,
+    "img": "https://source.unsplash.com/800x600/?sweet-potato"
+  },
+  {
+    "id": 1049,
+    "title": "Green Beans (1kg)",
+    "category": "Organic & Animal-based Fresh Foods",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?green-beans"
+  },
+
+  // Meat Products
+  {
+    "id": 1008,
+    "title": "Fresh Beef (1kg)",
+    "category": "Meat",
+    "price": 3500,
+    "img": "https://source.unsplash.com/800x600/?beef",
+    "popular": true
+  },
+  {
+    "id": 1009,
+    "title": "Beef Steak (1kg)",
+    "category": "Meat",
+    "price": 5000,
+    "img": "https://source.unsplash.com/800x600/?steak"
+  },
+  {
+    "id": 1010,
+    "title": "Minced Beef (1kg)",
+    "category": "Meat",
+    "price": 4500,
+    "img": "https://source.unsplash.com/800x600/?minced-beef"
+  },
+  {
+    "id": 1011,
+    "title": "Beef Liver (1kg)",
+    "category": "Meat",
+    "price": 3000,
+    "img": "https://source.unsplash.com/800x600/?liver"
+  },
+  {
+    "id": 1012,
+    "title": "Beef Ribs (1kg)",
+    "category": "Meat",
+    "price": 4000,
+    "img": "https://source.unsplash.com/800x600/?beef-ribs"
+  },
+  {
+    "id": 1014,
+    "title": "Fresh Goat Meat (1kg)",
+    "category": "Meat",
+    "price": 3800,
+    "img": "https://source.unsplash.com/800x600/?goat-meat"
+  },
+  {
+    "id": 1015,
+    "title": "Roasted Goat (Brochette) per stick",
+    "category": "Meat",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?brochette",
+    "popular": true
+  },
+  {
+    "id": 1016,
+    "title": "Goat Liver (1kg)",
+    "category": "Meat",
+    "price": 3000,
+    "img": "https://source.unsplash.com/800x600/?goat-liver"
+  },
+  {
+    "id": 1018,
+    "title": "Fresh Mutton (1kg)",
+    "category": "Meat",
+    "price": 4500,
+    "img": "https://source.unsplash.com/800x600/?mutton"
+  },
+  {
+    "id": 1019,
+    "title": "Mutton Ribs (1kg)",
+    "category": "Meat",
+    "price": 5000,
+    "img": "https://source.unsplash.com/800x600/?mutton-ribs"
+  },
+  {
+    "id": 1021,
+    "title": "Local Chicken (Free-range)",
+    "category": "Meat",
+    "price": 6000,
+    "img": "https://source.unsplash.com/800x600/?chicken",
+    "popular": true
+  },
+  {
+    "id": 1022,
+    "title": "Broiler Chicken",
+    "category": "Meat",
+    "price": 4500,
+    "img": "https://source.unsplash.com/800x600/?broiler-chicken"
+  },
+  {
+    "id": 1023,
+    "title": "Chicken Wings (1kg)",
+    "category": "Meat",
+    "price": 3500,
+    "img": "https://source.unsplash.com/800x600/?chicken-wings"
+  },
+  {
+    "id": 1024,
+    "title": "Chicken Legs (1kg)",
+    "category": "Meat",
+    "price": 3800,
+    "img": "https://source.unsplash.com/800x600/?chicken-legs"
+  },
+  {
+    "id": 1026,
+    "title": "Fresh Pork (1kg)",
+    "category": "Meat",
+    "price": 3800,
+    "img": "https://source.unsplash.com/800x600/?pork"
+  },
+  {
+    "id": 1027,
+    "title": "Pork Ribs (1kg)",
+    "category": "Meat",
+    "price": 4000,
+    "img": "https://source.unsplash.com/800x600/?pork-ribs"
+  },
+  {
+    "id": 1028,
+    "title": "Sausages (a pack)",
+    "category": "Meat",
+    "price": 2500,
+    "img": "https://source.unsplash.com/800x600/?sausages",
+    "popular": true
+  },
+  {
+    "id": 1029,
+    "title": "Bacon (1kg)",
+    "category": "Meat",
+    "price": 5000,
+    "img": "https://source.unsplash.com/800x600/?bacon"
+  },
+  {
+    "id": 1031,
+    "title": "Tilapia (1kg)",
+    "category": "Meat",
+    "price": 4000,
+    "img": "https://source.unsplash.com/800x600/?tilapia"
+  },
+  {
+    "id": 1032,
+    "title": "Nile Perch (1kg)",
+    "category": "Meat",
+    "price": 5000,
+    "img": "https://source.unsplash.com/800x600/?nile-perch"
+  },
+  {
+    "id": 1033,
+    "title": "Sardines/ Isambaza (1kg)",
+    "category": "Meat",
+    "price": 2500,
+    "img": "https://source.unsplash.com/800x600/?sardines"
+  },
+  {
+    "id": 1034,
+    "title": "Smoked Fish (1kg)",
+    "category": "Meat",
+    "price": 3500,
+    "img": "https://source.unsplash.com/800x600/?smoked-fish"
+  },
+
+  // Fruits & Vegetables
+  {
+    "id": 1036,
+    "title": "Carrot (1kg)",
+    "category": "Fruits & Vegetables",
+    "price": 800,
+    "img": "https://source.unsplash.com/800x600/?carrot",
+    "popular": true
+  },
+  {
+    "id": 1037,
+    "title": "Cabbage (1)",
+    "category": "Fruits & Vegetables",
+    "price": 1000,
+    "img": "https://source.unsplash.com/800x600/?cabbage"
+  },
+  {
+    "id": 1038,
+    "title": "Onion (1kg)",
+    "category": "Fruits & Vegetables",
+    "price": 1200,
+    "img": "https://source.unsplash.com/800x600/?onion"
+  },
+  {
+    "id": 1039,
+    "title": "Tomato (1kg)",
+    "category": "Fruits & Vegetables",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?tomato",
+    "popular": true
+  },
+  {
+    "id": 1040,
+    "title": "Green Pepper (1kg)",
+    "category": "Fruits & Vegetables",
+    "price": 1000,
+    "img": "https://source.unsplash.com/800x600/?green-pepper"
+  },
+  {
+    "id": 1041,
+    "title": "Eggplant (1kg)",
+    "category": "Fruits & Vegetables",
+    "price": 1000,
+    "img": "https://source.unsplash.com/800x600/?eggplant"
+  },
+  {
+    "id": 1042,
+    "title": "Spinach (1 bunch)",
+    "category": "Fruits & Vegetables",
+    "price": 800,
+    "img": "https://source.unsplash.com/800x600/?spinach"
+  },
+  {
+    "id": 1043,
+    "title": "Lettuce (1 bunch)",
+    "category": "Fruits & Vegetables",
+    "price": 1200,
+    "img": "https://source.unsplash.com/800x600/?lettuce"
+  },
+  {
+    "id": 1044,
+    "title": "Cucumber (each)",
+    "category": "Fruits & Vegetables",
+    "price": 800,
+    "img": "https://source.unsplash.com/800x600/?cucumber"
+  },
+  {
+    "id": 1045,
+    "title": "Garlic (250g)",
+    "category": "Fruits & Vegetables",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?garlic"
+  },
+  {
+    "id": 1046,
+    "title": "Ginger (250g)",
+    "category": "Fruits & Vegetables",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?ginger"
+  },
+  {
+    "id": 1050,
+    "title": "Pumpkin (each)",
+    "category": "Fruits & Vegetables",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?pumpkin"
+  },
+  {
+    "id": 1052,
+    "title": "Apple (each)",
+    "category": "Fruits & Vegetables",
+    "price": 500,
+    "img": "https://source.unsplash.com/800x600/?apple",
+    "popular": true
+  },
+  {
+    "id": 1053,
+    "title": "Banana (1 bunch)",
+    "category": "Fruits & Vegetables",
+    "price": 1000,
+    "img": "https://source.unsplash.com/800x600/?banana"
+  },
+  {
+    "id": 1054,
+    "title": "Orange (each)",
+    "category": "Fruits & Vegetables",
+    "price": 400,
+    "img": "https://source.unsplash.com/800x600/?orange"
+  },
+  {
+    "id": 1055,
+    "title": "Mango (each)",
+    "category": "Fruits & Vegetables",
+    "price": 800,
+    "img": "https://source.unsplash.com/800x600/?mango",
+    "popular": true
+  },
+  {
+    "id": 1056,
+    "title": "Pineapple (each)",
+    "category": "Fruits & Vegetables",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?pineapple"
+  },
+  {
+    "id": 1057,
+    "title": "Papaya (each)",
+    "category": "Fruits & Vegetables",
+    "price": 1200,
+    "img": "https://source.unsplash.com/800x600/?papaya"
+  },
+  {
+    "id": 1058,
+    "title": "Watermelon (each)",
+    "category": "Fruits & Vegetables",
+    "price": 2500,
+    "img": "https://source.unsplash.com/800x600/?watermelon"
+  },
+  {
+    "id": 1059,
+    "title": "Avocado (each)",
+    "category": "Fruits & Vegetables",
+    "price": 600,
+    "img": "https://source.unsplash.com/800x600/?avocado"
+  },
+  {
+    "id": 1060,
+    "title": "Passion Fruit (1kg)",
+    "category": "Fruits & Vegetables",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?passion-fruit"
+  },
+  {
+    "id": 1061,
+    "title": "Lemon (each)",
+    "category": "Fruits & Vegetables",
+    "price": 400,
+    "img": "https://source.unsplash.com/800x600/?lemon"
+  },
+  {
+    "id": 1062,
+    "title": "Grapes (1kg)",
+    "category": "Fruits & Vegetables",
+    "price": 4000,
+    "img": "https://source.unsplash.com/800x600/?grapes"
+  },
+  {
+    "id": 1063,
+    "title": "Strawberry (1 pack)",
+    "category": "Fruits & Vegetables",
+    "price": 2500,
+    "img": "https://source.unsplash.com/800x600/?strawberry"
+  },
+  {
+    "id": 1064,
+    "title": "Pomegranate (each)",
+    "category": "Fruits & Vegetables",
+    "price": 2000,
+    "img": "https://source.unsplash.com/800x600/?pomegranate"
+  },
+  {
+    "id": 1065,
+    "title": "Guava (each)",
+    "category": "Fruits & Vegetables",
+    "price": 700,
+    "img": "https://source.unsplash.com/800x600/?guava"
+  },
+  {
+    "id": 1066,
+    "title": "Kiwi (each)",
+    "category": "Fruits & Vegetables",
+    "price": 800,
+    "img": "https://source.unsplash.com/800x600/?kiwi"
+  },
+  {
+    "id": 1067,
+    "title": "Coconut (each)",
+    "category": "Fruits & Vegetables",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?coconut"
+  },
+  {
+    "id": 1068,
+    "title": "Sugarcane (1 piece)",
+    "category": "Fruits & Vegetables",
+    "price": 500,
+    "img": "https://source.unsplash.com/800x600/?sugarcane"
+  },
+  {
+    "id": 1069,
+    "title": "Pear (each)",
+    "category": "Fruits & Vegetables",
+    "price": 600,
+    "img": "https://source.unsplash.com/800x600/?pear"
+  },
+  {
+    "id": 1070,
+    "title": "Plum (each)",
+    "category": "Fruits & Vegetables",
+    "price": 1200,
+    "img": "https://source.unsplash.com/800x600/?plum"
+  },
+
+  // Drinks
+  {
+    "id": 1072,
+    "title": "Beone Gin",
+    "category": "Drinks",
+    "price": 1800,
+    "img": "https://source.unsplash.com/800x600/?gin",
+    "sub": "Alcoholic",
+    "popular": true
+  },
+  {
+    "id": 1073,
+    "title": "Rabiant",
+    "category": "Drinks",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?alcohol",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1074,
+    "title": "Mambo",
+    "category": "Drinks",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?drink",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1075,
+    "title": "Rack Gin",
+    "category": "Drinks",
+    "price": 2300,
+    "img": "https://source.unsplash.com/800x600/?rack-gin",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1076,
+    "title": "Fimbo",
+    "category": "Drinks",
+    "price": 1700,
+    "img": "https://source.unsplash.com/800x600/?fimbo",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1077,
+    "title": "Big Konyagi",
+    "category": "Drinks",
+    "price": 7500,
+    "img": "https://source.unsplash.com/800x600/?konyagi",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1078,
+    "title": "Small Konyagi",
+    "category": "Drinks",
+    "price": 2800,
+    "img": "https://source.unsplash.com/800x600/?small-konyagi",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1079,
+    "title": "Big Boss",
+    "category": "Drinks",
+    "price": 4000,
+    "img": "https://source.unsplash.com/800x600/?big-boss",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1080,
+    "title": "Small Boss",
+    "category": "Drinks",
+    "price": 2300,
+    "img": "https://source.unsplash.com/800x600/?small-boss",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1081,
+    "title": "Bond 7",
+    "category": "Drinks",
+    "price": 3500,
+    "img": "https://source.unsplash.com/800x600/?bond-7",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1083,
+    "title": "Wine",
+    "category": "Drinks",
+    "price": 15000,
+    "img": "https://source.unsplash.com/800x600/?wine",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1084,
+    "title": "Bavaria",
+    "category": "Drinks",
+    "price": 3000,
+    "img": "https://source.unsplash.com/800x600/?bavaria",
+    "sub": "Non-Alcoholic"
+  },
+  {
+    "id": 1085,
+    "title": "Smirnoff Ice",
+    "category": "Drinks",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?smirnoff",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1086,
+    "title": "Agasusuruko",
+    "category": "Drinks",
+    "price": 1200,
+    "img": "https://source.unsplash.com/800x600/?agasusuruko",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1087,
+    "title": "Tuiste Yatangawize",
+    "category": "Drinks",
+    "price": 500,
+    "img": "https://source.unsplash.com/800x600/?tuiste",
+    "sub": "Non-Alcoholic"
+  },
+  {
+    "id": 1089,
+    "title": "Amstel",
+    "category": "Drinks",
+    "price": 2000,
+    "img": "https://source.unsplash.com/800x600/?amstel",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1090,
+    "title": "Turbo",
+    "category": "Drinks",
+    "price": 2000,
+    "img": "https://source.unsplash.com/800x600/?turbo",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1091,
+    "title": "Small Primus",
+    "category": "Drinks",
+    "price": 2000,
+    "img": "https://source.unsplash.com/800x600/?primus",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1092,
+    "title": "Big Primus",
+    "category": "Drinks",
+    "price": 2500,
+    "img": "https://source.unsplash.com/800x600/?big-primus",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1093,
+    "title": "Petit Skol Malt",
+    "category": "Drinks",
+    "price": 2000,
+    "img": "https://source.unsplash.com/800x600/?skol-malt",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1094,
+    "title": "Big Skol Malt",
+    "category": "Drinks",
+    "price": 2500,
+    "img": "https://source.unsplash.com/800x600/?big-skol",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1095,
+    "title": "Big Skol Gatanu",
+    "category": "Drinks",
+    "price": 2500,
+    "img": "https://source.unsplash.com/800x600/?skol-gatanu",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1096,
+    "title": "Big Primus",
+    "category": "Drinks",
+    "price": 2500,
+    "img": "https://source.unsplash.com/800x600/?primus-beer",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1097,
+    "title": "Petit Miitzing",
+    "category": "Drinks",
+    "price": 2000,
+    "img": "https://source.unsplash.com/800x600/?miitzing",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1098,
+    "title": "Big Miitzing",
+    "category": "Drinks",
+    "price": 2500,
+    "img": "https://source.unsplash.com/800x600/?big-miitzing",
+    "sub": "Alcoholic"
+  },
+  {
+    "id": 1100,
+    "title": "Novida",
+    "category": "Drinks",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?novida",
+    "sub": "Non-Alcoholic"
+  },
+  {
+    "id": 1101,
+    "title": "Coca-cola",
+    "category": "Drinks",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?coca-cola",
+    "sub": "Non-Alcoholic",
+    "popular": true
+  },
+  {
+    "id": 1102,
+    "title": "Energy Drink",
+    "category": "Drinks",
+    "price": 800,
+    "img": "https://source.unsplash.com/800x600/?energy-drink",
+    "sub": "Non-Alcoholic"
+  },
+  {
+    "id": 1103,
+    "title": "Pineapple Juice",
+    "category": "Drinks",
+    "price": 700,
+    "img": "https://source.unsplash.com/800x600/?pineapple-juice",
+    "sub": "Non-Alcoholic"
+  },
+  {
+    "id": 1104,
+    "title": "Mixed Fruit Juice",
+    "category": "Drinks",
+    "price": 2000,
+    "img": "https://source.unsplash.com/800x600/?fruit-juice",
+    "sub": "Non-Alcoholic"
+  },
+  {
+    "id": 1105,
+    "title": "Mango Juice",
+    "category": "Drinks",
+    "price": 1500,
+    "img": "https://source.unsplash.com/800x600/?mango-juice",
+    "sub": "Non-Alcoholic"
+  },
+  {
+    "id": 1106,
+    "title": "Big Bottle of Water",
+    "category": "Drinks",
+    "price": 1200,
+    "img": "https://source.unsplash.com/800x600/?water-bottle",
+    "sub": "Non-Alcoholic"
+  },
+  {
+    "id": 1107,
+    "title": "Small Bottle of Water",
+    "category": "Drinks",
+    "price": 700,
+    "img": "https://source.unsplash.com/800x600/?small-water",
+    "sub": "Non-Alcoholic"
+  }
+];
+function log(message) {
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += `${new Date().toLocaleTimeString()}: ${message}<br>`;
+            console.log(message);
+        }
+
+        // Test Firebase connection
+        async function testConnection() {
+            log("Testing Firebase connection...");
+            try {
+                const testDoc = await db.collection('test').doc('connection-test').get();
+                log("✅ Firebase connection successful!");
+            } catch (error) {
+                log("❌ Firebase connection failed: " + error.message);
+            }
+        }
+
+        // Import products
+        async function importProducts() {
+            log("Starting product import...");
+            
+            if (!products || products.length === 0) {
+                log("❌ No products to import!");
+                return;
+            }
+
+            log(`Found ${products.length} products to import`);
+
+            for (const product of products) {
+                try {
+                    log(`Importing: ${product.title}...`);
+                    await db.collection('products').add({
+                        ...product,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    log(`✅ Success: ${product.title}`);
+                } catch (error) {
+                    log(`❌ Error importing ${product.title}: ${error.message}`);
+                }
+            }
+            log("Import process completed!");
+        }
+
+        log("Page loaded. Click 'Test Firebase Connection' first.");
+    </script>
+</body>
+</html>

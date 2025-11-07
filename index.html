@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Fresh Drop Rwanda - Fresh Groceries Delivered Daily</title>
   <link rel="icon" type="image/png" href="image1.png" />
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  
+  <!-- Flutterwave Payment -->
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+  
   <meta name="description" content="Fresh Drop Rwanda - Premium grocery delivery service with fresh meat, fruits, vegetables, drinks, and organic foods. Fast delivery in Kigali.">
   <meta name="keywords" content="fresh drop rwanda, groceries, delivery, kigali, fresh food, meat, fruits, vegetables">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,6 +41,39 @@
         </nav>
 
         <div class="nav-actions">
+          <div class="auth-buttons" id="authButtons">
+            <button class="btn btn-outline" id="loginBtn">Login</button>
+            <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+          </div>
+          
+          <div class="user-menu-wrapper" id="userMenuWrapper" style="display: none;">
+            <button class="user-dropdown-btn" id="userDropdownBtn">
+              <i class="fas fa-user-circle"></i>
+              <span id="userDisplayName">User</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="user-dropdown" id="userDropdown">
+              <div class="dropdown-header">
+                <strong id="dropdownUserName">User Name</strong>
+                <span id="dropdownUserEmail">user@email.com</span>
+              </div>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item" id="dropdownAccount">
+                <i class="fas fa-user"></i>
+                Account Information
+              </a>
+              <a href="#" class="dropdown-item" id="dropdownOrders">
+                <i class="fas fa-shopping-bag"></i>
+                Order History
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item logout" id="dropdownLogout">
+                <i class="fas fa-sign-out-alt"></i>
+                Sign Out
+              </a>
+            </div>
+          </div>
+
           <button class="cart-icon" id="cartIcon">
             <i class="fas fa-shopping-cart"></i>
             <span class="cart-count" id="cartCount">0</span>
@@ -73,6 +115,41 @@
         <i class="fas fa-info-circle"></i>
         About Us
       </a>
+      
+      <!-- Mobile Auth Section -->
+      <div class="mobile-auth-section" id="mobileAuthSection">
+        <a href="#" class="mobile-nav-link" id="mobileLoginBtn">
+          <i class="fas fa-sign-in-alt"></i>
+          Login
+        </a>
+        <a href="#" class="mobile-nav-link" id="mobileSignupBtn">
+          <i class="fas fa-user-plus"></i>
+          Sign Up
+        </a>
+      </div>
+      
+      <div class="mobile-user-section" id="mobileUserSection" style="display: none;">
+        <div class="mobile-user-info">
+          <i class="fas fa-user-circle"></i>
+          <div>
+            <strong id="mobileUserName">User Name</strong>
+            <span id="mobileUserEmail">user@email.com</span>
+          </div>
+        </div>
+        <a href="#" class="mobile-nav-link" id="mobileAccountLink">
+          <i class="fas fa-user"></i>
+          Account Information
+        </a>
+        <a href="#" class="mobile-nav-link" id="mobileOrdersLink">
+          <i class="fas fa-shopping-bag"></i>
+          My Orders
+        </a>
+        <a href="#" class="mobile-nav-link" id="mobileLogoutBtn">
+          <i class="fas fa-sign-out-alt"></i>
+          Sign Out
+        </a>
+      </div>
+
       <div class="mobile-menu-divider"></div>
       <div class="mobile-categories">
         <h4>Categories</h4>
@@ -160,10 +237,10 @@
         </div>
         <div class="feature-card">
           <div class="feature-icon">
-            <i class="fas fa-percentage"></i>
+            <i class="fas fa-credit-card"></i>
           </div>
-          <h3 class="feature-title">Best Prices</h3>
-          <p class="feature-description">Competitive prices without compromising on quality. Great value for your money.</p>
+          <h3 class="feature-title">Secure Payments</h3>
+          <p class="feature-description">Pay safely with MTN Mobile Money, Airtel Money, or credit cards.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
@@ -219,12 +296,254 @@
     </div>
   </section>
 
+  <!-- Auth Modals -->
+  <div class="modal auth-modal" id="loginModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Login to Your Account</h2>
+        <button class="close-modal" data-modal="loginModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm" class="auth-form">
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" required placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" required placeholder="Enter your password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fas fa-sign-in-alt"></i>
+            Login
+          </button>
+        </form>
+
+        <div class="social-login">
+          <div class="divider">
+            <span>Or continue with</span>
+          </div>
+          <div class="social-buttons">
+            <button class="btn btn-google btn-block" id="googleLogin">
+              <i class="fab fa-google"></i>
+              Continue with Google
+            </button>
+            <button class="btn btn-facebook btn-block" id="facebookLogin">
+              <i class="fab fa-facebook-f"></i>
+              Continue with Facebook
+            </button>
+          </div>
+        </div>
+
+        <div class="auth-switch">
+          <p>Don't have an account? <a href="#" id="showSignup">Sign up here</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal auth-modal" id="signupModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Create Your Account</h2>
+        <button class="close-modal" data-modal="signupModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="signupForm" class="auth-form">
+          <div class="form-group">
+            <label for="signupName">Full Name</label>
+            <input type="text" id="signupName" required placeholder="Enter your full name">
+          </div>
+          <div class="form-group">
+            <label for="signupEmail">Email</label>
+            <input type="email" id="signupEmail" required placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label for="signupPhone">Phone Number</label>
+            <input type="tel" id="signupPhone" required placeholder="+250 XXX XXX XXX">
+          </div>
+          <div class="form-group">
+            <label for="signupPassword">Password</label>
+            <input type="password" id="signupPassword" required placeholder="Create a password (min. 6 characters)">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fas fa-user-plus"></i>
+            Create Account
+          </button>
+        </form>
+
+        <div class="social-login">
+          <div class="divider">
+            <span>Or continue with</span>
+          </div>
+          <div class="social-buttons">
+            <button class="btn btn-google btn-block" id="googleSignup">
+              <i class="fab fa-google"></i>
+              Continue with Google
+            </button>
+            <button class="btn btn-facebook btn-block" id="facebookSignup">
+              <i class="fab fa-facebook-f"></i>
+              Continue with Facebook
+            </button>
+          </div>
+        </div>
+
+        <div class="auth-switch">
+          <p>Already have an account? <a href="#" id="showLogin">Login here</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account Modal -->
+  <div class="modal account-modal" id="accountModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">My Account</h2>
+        <button class="close-modal" data-modal="accountModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="account-tabs">
+          <button class="tab-btn active" data-tab="profile">Profile</button>
+          <button class="tab-btn" data-tab="orders">My Orders</button>
+        </div>
+        
+        <div class="tab-content active" id="profileTab">
+          <div class="profile-info">
+            <div class="profile-header">
+              <div class="profile-avatar">
+                <i class="fas fa-user-circle"></i>
+              </div>
+              <div class="profile-details">
+                <h3 id="userName">Loading...</h3>
+                <p id="userEmail">Loading...</p>
+                <p id="userPhone" class="text-light">Loading...</p>
+              </div>
+            </div>
+            <div class="profile-stats">
+              <div class="stat-card">
+                <div class="stat-number" id="totalOrders">0</div>
+                <div class="stat-label">Total Orders</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="pendingOrders">0</div>
+                <div class="stat-label">Pending</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="completedOrders">0</div>
+                <div class="stat-label">Completed</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="ordersTab">
+          <div class="orders-list" id="ordersList">
+            <div class="loading-orders">
+              <i class="fas fa-spinner fa-spin"></i>
+              <p>Loading your orders...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="accountLogout">
+          <i class="fas fa-sign-out-alt"></i>
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div class="modal payment-modal" id="paymentModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Complete Your Order</h2>
+        <button class="close-modal" data-modal="paymentModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="order-summary">
+          <h4>Order Summary</h4>
+          <div class="order-items-summary" id="orderItemsSummary">
+            <!-- Order items will be added here -->
+          </div>
+          <div class="order-total-summary">
+            <strong>Total: <span id="orderTotalSummary">RWF 0</span></strong>
+          </div>
+        </div>
+
+        <div class="payment-section">
+          <h4>Select Payment Method</h4>
+          <div class="payment-methods">
+            <label class="payment-option">
+              <input type="radio" name="payment" value="mtn" checked>
+              <div class="payment-icon">
+                <i class="fas fa-mobile-alt"></i>
+              </div>
+              <div class="payment-info">
+                <span class="payment-name">MTN Mobile Money</span>
+                <span class="payment-desc">Pay with your MTN number</span>
+              </div>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="payment" value="airtel">
+              <div class="payment-icon">
+                <i class="fas fa-sim-card"></i>
+              </div>
+              <div class="payment-info">
+                <span class="payment-name">Airtel Money</span>
+                <span class="payment-desc">Pay with your Airtel number</span>
+              </div>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="payment" value="card">
+              <div class="payment-icon">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <div class="payment-info">
+                <span class="payment-name">Credit/Debit Card</span>
+                <span class="payment-desc">Pay with Visa or Mastercard</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="delivery-info">
+          <h4>Delivery Information</h4>
+          <div class="form-group">
+            <label for="deliveryAddress">Delivery Address</label>
+            <input type="text" id="deliveryAddress" required placeholder="Enter your delivery address">
+          </div>
+          <div class="form-group">
+            <label for="deliveryNotes">Delivery Notes (Optional)</label>
+            <textarea id="deliveryNotes" placeholder="Any special instructions for delivery..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-block" id="confirmPayment">
+          <i class="fas fa-credit-card"></i>
+          Confirm & Pay
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- About Modal -->
   <div class="modal about-modal" id="aboutModal">
     <div class="modal-content">
       <div class="modal-header">
         <h2 class="modal-title">About Fresh Drop Rwanda</h2>
-        <button class="close-modal" id="closeAboutModal">
+        <button class="close-modal" data-modal="aboutModal">
           <i class="fas fa-times"></i>
         </button>
       </div>
@@ -280,7 +599,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" onclick="toggleAboutModal()">
+        <button class="btn btn-primary" onclick="toggleModal('aboutModal')">
           <i class="fas fa-shopping-bag"></i>
           Start Shopping
         </button>
@@ -305,8 +624,8 @@
         <span id="cartTotal">RWF 0</span>
       </div>
       <button class="checkout-btn" id="checkoutBtn">
-        <i class="fas fa-credit-card"></i>
-        Proceed to Checkout
+        <i class="fas fa-shopping-bag"></i>
+        Checkout Now
       </button>
     </div>
   </div>
