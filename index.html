@@ -240,7 +240,7 @@
             <i class="fas fa-credit-card"></i>
           </div>
           <h3 class="feature-title">Secure Payments</h3>
-          <p class="feature-description">Pay safely with MTN Mobile Money, Airtel Money, or credit cards.</p>
+          <p class="feature-description">Pay safely with MTN Mobile Money, Airtel Money, or credit cards via Flutterwave.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
@@ -522,68 +522,156 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="order-summary">
-          <h4>Order Summary</h4>
-          <div class="order-items-summary" id="orderItemsSummary">
-            <!-- Order items will be added here -->
+        <!-- Step 1: Order Details -->
+        <div class="payment-step active" id="paymentStep1">
+          <div class="order-summary">
+            <h4>Order Summary</h4>
+            <div class="order-items-summary" id="orderItemsSummary">
+              <!-- Order items will be added here -->
+            </div>
+            <div class="order-total-summary">
+              <strong>Total: <span id="orderTotalSummary">RWF 0</span></strong>
+            </div>
           </div>
-          <div class="order-total-summary">
-            <strong>Total: <span id="orderTotalSummary">RWF 0</span></strong>
+
+          <div class="payment-section">
+            <h4>Select Payment Method</h4>
+            <div class="payment-methods">
+              <label class="payment-option">
+                <input type="radio" name="payment" value="mobile_money_rwanda" checked>
+                <div class="payment-icon">
+                  <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div class="payment-info">
+                  <span class="payment-name">Mobile Money</span>
+                  <span class="payment-desc">Pay with MTN or Airtel Money</span>
+                </div>
+              </label>
+              <label class="payment-option">
+                <input type="radio" name="payment" value="card">
+                <div class="payment-icon">
+                  <i class="fas fa-credit-card"></i>
+                </div>
+                <div class="payment-info">
+                  <span class="payment-name">Credit/Debit Card</span>
+                  <span class="payment-desc">Pay with Visa, Mastercard or Verve</span>
+                </div>
+              </label>
+              <label class="payment-option">
+                <input type="radio" name="payment" value="bank_transfer">
+                <div class="payment-icon">
+                  <i class="fas fa-university"></i>
+                </div>
+                <div class="payment-info">
+                  <span class="payment-name">Bank Transfer</span>
+                  <span class="payment-desc">Transfer directly from your bank</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="delivery-info">
+            <h4>Delivery Information</h4>
+            <div class="form-group">
+              <label for="deliveryAddress">Delivery Address *</label>
+              <input type="text" id="deliveryAddress" required placeholder="Enter your complete delivery address">
+            </div>
+            <div class="form-group" id="phoneNumberGroup">
+              <label for="paymentPhone">Phone Number *</label>
+              <input type="tel" id="paymentPhone" required placeholder="+250 XXX XXX XXX">
+              <small class="text-muted">We'll contact you on this number for delivery updates</small>
+            </div>
+            <div class="form-group">
+              <label for="deliveryNotes">Delivery Notes (Optional)</label>
+              <textarea id="deliveryNotes" placeholder="Any special instructions for delivery..."></textarea>
+            </div>
           </div>
         </div>
 
-        <div class="payment-section">
-          <h4>Select Payment Method</h4>
-          <div class="payment-methods">
-            <label class="payment-option">
-              <input type="radio" name="payment" value="mtn" checked>
-              <div class="payment-icon">
-                <i class="fas fa-mobile-alt"></i>
+        <!-- Step 2: Order Confirmation -->
+        <div class="payment-step" id="paymentStep2">
+          <div class="order-confirmation">
+            <div class="confirmation-header">
+              <i class="fas fa-clipboard-check"></i>
+              <h3>Order Confirmation</h3>
+              <p>Please review your order details before proceeding to payment</p>
+            </div>
+            
+            <div class="confirmation-details">
+              <div class="confirmation-section">
+                <h4>Order Information</h4>
+                <div class="detail-row">
+                  <span class="detail-label">Order ID:</span>
+                  <span class="detail-value" id="confirmOrderId">-</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Order Date:</span>
+                  <span class="detail-value" id="confirmOrderDate">-</span>
+                </div>
               </div>
-              <div class="payment-info">
-                <span class="payment-name">MTN Mobile Money</span>
-                <span class="payment-desc">Pay with your MTN number</span>
-              </div>
-            </label>
-            <label class="payment-option">
-              <input type="radio" name="payment" value="airtel">
-              <div class="payment-icon">
-                <i class="fas fa-sim-card"></i>
-              </div>
-              <div class="payment-info">
-                <span class="payment-name">Airtel Money</span>
-                <span class="payment-desc">Pay with your Airtel number</span>
-              </div>
-            </label>
-            <label class="payment-option">
-              <input type="radio" name="payment" value="card">
-              <div class="payment-icon">
-                <i class="fas fa-credit-card"></i>
-              </div>
-              <div class="payment-info">
-                <span class="payment-name">Credit/Debit Card</span>
-                <span class="payment-desc">Pay with Visa or Mastercard</span>
-              </div>
-            </label>
-          </div>
-        </div>
 
-        <div class="delivery-info">
-          <h4>Delivery Information</h4>
-          <div class="form-group">
-            <label for="deliveryAddress">Delivery Address</label>
-            <input type="text" id="deliveryAddress" required placeholder="Enter your delivery address">
-          </div>
-          <div class="form-group">
-            <label for="deliveryNotes">Delivery Notes (Optional)</label>
-            <textarea id="deliveryNotes" placeholder="Any special instructions for delivery..."></textarea>
+              <div class="confirmation-section">
+                <h4>Customer Information</h4>
+                <div class="detail-row">
+                  <span class="detail-label">Name:</span>
+                  <span class="detail-value" id="confirmCustomerName">-</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Email:</span>
+                  <span class="detail-value" id="confirmCustomerEmail">-</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Phone:</span>
+                  <span class="detail-value" id="confirmCustomerPhone">-</span>
+                </div>
+              </div>
+
+              <div class="confirmation-section">
+                <h4>Delivery Information</h4>
+                <div class="detail-row">
+                  <span class="detail-label">Address:</span>
+                  <span class="detail-value" id="confirmDeliveryAddress">-</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Notes:</span>
+                  <span class="detail-value" id="confirmDeliveryNotes">-</span>
+                </div>
+              </div>
+
+              <div class="confirmation-section">
+                <h4>Order Items</h4>
+                <div class="confirmation-items" id="confirmationItems">
+                  <!-- Items will be populated here -->
+                </div>
+                <div class="confirmation-total">
+                  <span>Total Amount:</span>
+                  <span id="confirmTotalAmount">RWF 0</span>
+                </div>
+              </div>
+
+              <div class="confirmation-section">
+                <h4>Payment Method</h4>
+                <div class="detail-row">
+                  <span class="detail-label">Method:</span>
+                  <span class="detail-value" id="confirmPaymentMethod">-</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary btn-block" id="confirmPayment">
+        <button class="btn btn-outline" id="backToDetails" style="display: none;">
+          <i class="fas fa-arrow-left"></i>
+          Back to Details
+        </button>
+        <button class="btn btn-primary" id="confirmPayment">
           <i class="fas fa-credit-card"></i>
           Confirm & Pay
+        </button>
+        <button class="btn btn-success" id="proceedToPayment" style="display: none;">
+          <i class="fas fa-lock"></i>
+          Proceed to Payment
         </button>
       </div>
     </div>
