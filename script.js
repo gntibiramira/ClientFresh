@@ -14,9 +14,6 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-// Flutterwave configuration
-const FLUTTERWAVE_PUBLIC_KEY = "FLWPUBK_TEST-XXXXXXXXXXXXXXXX-X"; // Replace with your Flutterwave public key
-
 // Shopping Cart Management
 let cart = JSON.parse(localStorage.getItem('freshdrop_cart')) || {};
 
@@ -30,12 +27,10 @@ let currentPage = 1;
 // Current User
 let currentUser = null;
 
-// Current Order Data
-let currentOrderData = null;
-
 // DOM Elements
-const cartIcon = document.getElementById('cartIcon');
-const cartCount = document.getElementById('cartCount');
+const floatingCartBtn = document.getElementById('floatingCartBtn');
+const floatingCartCount = document.getElementById('floatingCartCount');
+const floatingCartTotal = document.getElementById('floatingCartTotal');
 const cartSidebar = document.getElementById('cartSidebar');
 const closeCart = document.getElementById('closeCart');
 const cartItems = document.getElementById('cartItems');
@@ -110,8 +105,6 @@ const orderTotalSummary = document.getElementById('orderTotalSummary');
 const deliveryAddress = document.getElementById('deliveryAddress');
 const deliveryNotes = document.getElementById('deliveryNotes');
 const confirmPayment = document.getElementById('confirmPayment');
-const proceedToPayment = document.getElementById('proceedToPayment');
-const backToDetails = document.getElementById('backToDetails');
 
 // Mobile Menu Elements
 const mobileMenu = document.getElementById('mobileMenu');
@@ -301,20 +294,14 @@ async function handleSocialLogin(provider) {
         name: user.displayName || 'User',
         email: user.email,
         phone: user.phoneNumber || '',
-        address: '',
         photoURL: user.photoURL || '',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     }
     
     showNotification(`Welcome${user.displayName ? ' ' + user.displayName : ''}!`);
-    // Close any open auth modals
-    if (loginModal.classList.contains('active')) {
-      toggleModal('loginModal');
-    }
-    if (signupModal.classList.contains('active')) {
-      toggleModal('signupModal');
-    }
+    toggleModal('loginModal');
+    toggleModal('signupModal');
     
   } catch (error) {
     console.error('Social login error:', error);
@@ -335,7 +322,20 @@ async function handleLogin(e) {
     loginForm.reset();
   } catch (error) {
     console.error('Login error:', error);
-    showNotification(error.message);
+    
+    // Improved error messages
+    let errorMessage = 'Login failed. Please try again.';
+    if (error.code === 'auth/user-not-found') {
+      errorMessage = 'No account found with this email.';
+    } else if (error.code === 'auth/wrong-password') {
+      errorMessage = 'Incorrect password. Please try again.';
+    } else if (error.code === 'auth/invalid-email') {
+      errorMessage = 'Invalid email format.';
+    } else if (error.code === 'auth/too-many-requests') {
+      errorMessage = 'Too many failed attempts. Please try again later.';
+    }
+    
+    showNotification(errorMessage);
   }
 }
 
@@ -355,7 +355,6 @@ async function handleSignup(e) {
       name: name,
       email: email,
       phone: phone,
-      address: '',
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
     
@@ -364,7 +363,18 @@ async function handleSignup(e) {
     signupForm.reset();
   } catch (error) {
     console.error('Signup error:', error);
-    showNotification(error.message);
+    
+    // Improved error messages
+    let errorMessage = 'Signup failed. Please try again.';
+    if (error.code === 'auth/email-already-in-use') {
+      errorMessage = 'Email already in use. Please use a different email.';
+    } else if (error.code === 'auth/weak-password') {
+      errorMessage = 'Password is too weak. Please use a stronger password.';
+    } else if (error.code === 'auth/invalid-email') {
+      errorMessage = 'Invalid email format.';
+    }
+    
+    showNotification(errorMessage);
   }
 }
 
@@ -372,14 +382,19 @@ async function handleLogout() {
   try {
     await auth.signOut();
     showNotification('Logged out successfully');
-    
-    // Close modals and dropdowns
     closeMobileMenuFunction();
-    if (accountModal.classList.contains('active')) {
-      toggleModal('accountModal');
-    }
+    toggleModal('accountModal');
     userDropdown.classList.remove('active');
     userDropdownBtn.classList.remove('active');
+    
+    // Scroll to home section after logout
+    const homeSection = document.getElementById('home');
+    if (homeSection) {
+      window.scrollTo({
+        top: homeSection.offsetTop - 80,
+        behavior: 'smooth'
+      });
+    }
   } catch (error) {
     console.error('Logout error:', error);
     showNotification('Error logging out');
@@ -401,79 +416,18 @@ async function updateUserProfile(user) {
       mobileUserName.textContent = userData.name || 'User';
       mobileUserEmail.textContent = userData.email;
       
-      // Update account modal - view mode
+      // Update account modal
       userName.textContent = userData.name || 'User';
       userEmail.textContent = userData.email;
       userPhone.textContent = userData.phone || 'Not provided';
-      
-      // Update view mode details
-      document.getElementById('viewUserName').textContent = userData.name || 'User';
-      document.getElementById('viewUserEmail').textContent = userData.email;
-      document.getElementById('viewUserPhone').textContent = userData.phone || 'Not provided';
-      document.getElementById('viewUserAddress').textContent = userData.address || 'Not provided';
-      
-      // Update edit mode form
-      document.getElementById('editUserName').value = userData.name || '';
-      document.getElementById('editUserPhone').value = userData.phone || '';
-      document.getElementById('editUserAddress').value = userData.address || '';
     }
   } catch (error) {
     console.error('Error fetching user profile:', error);
   }
 }
 
-// Profile Edit Functionality
-function initProfileEdit() {
-  const editProfileBtn = document.getElementById('editProfileBtn');
-  const cancelEditBtn = document.getElementById('cancelEditBtn');
-  const profileEditForm = document.getElementById('profileEditForm');
-  const profileView = document.getElementById('profileView');
-  const profileEdit = document.getElementById('profileEdit');
-
-  editProfileBtn.addEventListener('click', () => {
-    profileView.style.display = 'none';
-    profileEdit.style.display = 'block';
-  });
-
-  cancelEditBtn.addEventListener('click', () => {
-    profileEdit.style.display = 'none';
-    profileView.style.display = 'block';
-  });
-
-  profileEditForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    if (!currentUser) {
-      showNotification('Please login to update profile');
-      return;
-    }
-
-    const name = document.getElementById('editUserName').value;
-    const phone = document.getElementById('editUserPhone').value;
-    const address = document.getElementById('editUserAddress').value;
-
-    try {
-      await db.collection('users').doc(currentUser.uid).update({
-        name: name,
-        phone: phone,
-        address: address
-      });
-
-      showNotification('Profile updated successfully!');
-      profileEdit.style.display = 'none';
-      profileView.style.display = 'block';
-      
-      // Refresh user data
-      updateUserProfile(currentUser);
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      showNotification('Error updating profile');
-    }
-  });
-}
-
 function showUserMenu() {
-  authButtons.style.display = 'none';
+  authButtons.style.display = 'flex';
   userMenuWrapper.style.display = 'block';
   mobileAuthSection.style.display = 'none';
   mobileUserSection.style.display = 'block';
@@ -489,26 +443,7 @@ function showAuthButtons() {
 // Payment Functions
 function initPayment() {
   checkoutBtn.addEventListener('click', handleCheckout);
-  confirmPayment.addEventListener('click', handleConfirmPayment);
-  proceedToPayment.addEventListener('click', processPaymentWithFlutterwave);
-  backToDetails.addEventListener('click', showPaymentStep1);
-  
-  // Pre-fill phone number from user profile if available
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      db.collection('users').doc(user.uid).get().then((doc) => {
-        if (doc.exists) {
-          const userData = doc.data();
-          if (userData.phone) {
-            document.getElementById('paymentPhone').value = userData.phone;
-          }
-          if (userData.address) {
-            document.getElementById('deliveryAddress').value = userData.address;
-          }
-        }
-      });
-    }
-  });
+  confirmPayment.addEventListener('click', processPayment);
 }
 
 function handleCheckout() {
@@ -525,28 +460,8 @@ function handleCheckout() {
   
   // Show payment modal
   showPaymentSummary();
-  showPaymentStep1();
   toggleModal('paymentModal');
   toggleCart();
-}
-
-function showPaymentStep1() {
-  document.getElementById('paymentStep1').classList.add('active');
-  document.getElementById('paymentStep2').classList.remove('active');
-  document.getElementById('confirmPayment').style.display = 'block';
-  document.getElementById('proceedToPayment').style.display = 'none';
-  document.getElementById('backToDetails').style.display = 'none';
-}
-
-function showPaymentStep2() {
-  document.getElementById('paymentStep1').classList.remove('active');
-  document.getElementById('paymentStep2').classList.add('active');
-  document.getElementById('confirmPayment').style.display = 'none';
-  document.getElementById('proceedToPayment').style.display = 'block';
-  document.getElementById('backToDetails').style.display = 'block';
-  
-  // Populate confirmation details
-  showOrderConfirmation();
 }
 
 function showPaymentSummary() {
@@ -572,271 +487,53 @@ function showPaymentSummary() {
   orderTotalSummary.textContent = formatCurrency(total);
 }
 
-function showOrderConfirmation() {
-  const orderId = generateOrderNumber();
-  const orderDate = new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+async function processPayment() {
+  if (!deliveryAddress.value.trim()) {
+    showNotification('Please enter delivery address');
+    deliveryAddress.focus();
+    return;
+  }
   
-  const deliveryAddress = document.getElementById('deliveryAddress').value;
-  const deliveryNotes = document.getElementById('deliveryNotes').value;
-  const phoneNumber = document.getElementById('paymentPhone').value;
   const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-  const paymentMethodText = getPaymentMethodText(paymentMethod);
-  
   const totalAmount = Object.values(cart).reduce((total, item) => total + (item.price * item.quantity), 0);
   
-  // Set order information
-  document.getElementById('confirmOrderId').textContent = orderId;
-  document.getElementById('confirmOrderDate').textContent = orderDate;
-  
-  // Set customer information
-  document.getElementById('confirmCustomerName').textContent = currentUser.displayName || dropdownUserName.textContent;
-  document.getElementById('confirmCustomerEmail').textContent = currentUser.email;
-  document.getElementById('confirmCustomerPhone').textContent = phoneNumber;
-  
-  // Set delivery information
-  document.getElementById('confirmDeliveryAddress').textContent = deliveryAddress;
-  document.getElementById('confirmDeliveryNotes').textContent = deliveryNotes || 'No special instructions';
-  
-  // Set payment method
-  document.getElementById('confirmPaymentMethod').textContent = paymentMethodText;
-  
-  // Set order items
-  const confirmationItems = document.getElementById('confirmationItems');
-  confirmationItems.innerHTML = '';
-  
-  Object.values(cart).forEach(item => {
-    const itemTotal = item.price * item.quantity;
-    const itemElement = document.createElement('div');
-    itemElement.className = 'confirmation-item';
-    itemElement.innerHTML = `
-      <span class="item-name">${item.title} × ${item.quantity}</span>
-      <span class="item-price">${formatCurrency(itemTotal)}</span>
-    `;
-    confirmationItems.appendChild(itemElement);
-  });
-  
-  // Set total amount
-  document.getElementById('confirmTotalAmount').textContent = formatCurrency(totalAmount);
-  
-  // Store current order data for Flutterwave
-  currentOrderData = {
-    orderId: orderId,
-    customerName: currentUser.displayName || dropdownUserName.textContent,
-    customerEmail: currentUser.email,
-    customerPhone: phoneNumber,
-    deliveryAddress: deliveryAddress,
-    deliveryNotes: deliveryNotes,
-    paymentMethod: paymentMethod,
-    totalAmount: totalAmount,
-    items: Object.values(cart)
-  };
-}
-
-function getPaymentMethodText(method) {
-  const methods = {
-    'mobile_money_rwanda': 'Mobile Money (MTN/Airtel)',
-    'card': 'Credit/Debit Card',
-    'bank_transfer': 'Bank Transfer'
-  };
-  return methods[method] || method;
-}
-
-async function handleConfirmPayment() {
-  // Validate form
-  const deliveryAddress = document.getElementById('deliveryAddress').value.trim();
-  const phoneNumber = document.getElementById('paymentPhone').value.trim();
-  
-  if (!deliveryAddress) {
-    showNotification('Please enter delivery address');
-    document.getElementById('deliveryAddress').focus();
-    return;
-  }
-  
-  if (!phoneNumber) {
-    showNotification('Please enter your phone number');
-    document.getElementById('paymentPhone').focus();
-    return;
-  }
-  
-  // Validate phone number format (Rwandan format)
-  const phoneRegex = /^(\+250|250|0)?[7][2-8][0-9]{7}$/;
-  if (!phoneRegex.test(phoneNumber.replace(/\s/g, ''))) {
-    showNotification('Please enter a valid Rwandan phone number (e.g., +250 XXX XXX XXX)');
-    document.getElementById('paymentPhone').focus();
-    return;
-  }
-  
-  // Update user profile with phone number and address if they're different
   try {
-    const userDoc = await db.collection('users').doc(currentUser.uid).get();
-    if (userDoc.exists) {
-      const userData = userDoc.data();
-      const updates = {};
-      
-      if (!userData.phone || userData.phone !== phoneNumber) {
-        updates.phone = phoneNumber;
-      }
-      if (!userData.address || userData.address !== deliveryAddress) {
-        updates.address = deliveryAddress;
-      }
-      
-      if (Object.keys(updates).length > 0) {
-        await db.collection('users').doc(currentUser.uid).update(updates);
-        // Update the profile display
-        updateUserProfile(currentUser);
-      }
-    }
+    showNotification('Processing your order...');
+    
+    const order = {
+      userId: currentUser.uid,
+      customer: {
+        name: currentUser.displayName || dropdownUserName.textContent,
+        email: currentUser.email,
+        phone: document.getElementById('userPhone').textContent
+      },
+      items: cart,
+      total: totalAmount,
+      paymentMethod: paymentMethod,
+      deliveryAddress: deliveryAddress.value,
+      deliveryNotes: deliveryNotes.value,
+      status: 'confirmed',
+      orderNumber: generateOrderNumber(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    await db.collection('orders').add(order);
+    
+    showNotification('Order placed successfully! We will contact you soon.');
+    
+    // Clear cart and close modals
+    cart = {};
+    localStorage.setItem('freshdrop_cart', JSON.stringify(cart));
+    updateCartCount();
+    updateCartDisplay();
+    toggleModal('paymentModal');
+    deliveryAddress.value = '';
+    deliveryNotes.value = '';
+    
   } catch (error) {
-    console.error('Error updating user profile:', error);
-  }
-  
-  // Show confirmation step
-  showPaymentStep2();
-}
-
-function processPaymentWithFlutterwave() {
-  if (!currentOrderData) {
-    showNotification('Order data not found. Please try again.');
-    return;
-  }
-
-  const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-  
-  // Prepare payment data for Flutterwave
-  const flutterwaveData = {
-    public_key: FLUTTERWAVE_PUBLIC_KEY,
-    tx_ref: currentOrderData.orderId,
-    amount: currentOrderData.totalAmount,
-    currency: 'RWF',
-    payment_options: paymentMethod,
-    redirect_url: `${window.location.origin}/payment-success.html`, // You should create this page
-    customer: {
-      email: currentOrderData.customerEmail,
-      phone_number: currentOrderData.customerPhone,
-      name: currentOrderData.customerName,
-    },
-    customizations: {
-      title: "Fresh Drop Rwanda",
-      description: `Order #${currentOrderData.orderId}`,
-      logo: "https://your-logo-url.com/logo.png", // Add your logo URL
-    },
-    meta: {
-      order_id: currentOrderData.orderId,
-      delivery_address: currentOrderData.deliveryAddress,
-      delivery_notes: currentOrderData.deliveryNotes || '',
-    }
-  };
-
-  // Initialize Flutterwave payment
-  FlutterwaveCheckout({
-    ...flutterwaveData,
-    callback: function(response) {
-      // Handle payment response
-      handlePaymentResponse(response);
-    },
-    onclose: function() {
-      // Payment modal closed
-      showNotification('Payment was cancelled');
-    }
-  });
-}
-
-async function handlePaymentResponse(response) {
-  console.log('Flutterwave payment response:', response);
-  
-  if (response.status === 'successful') {
-    // Payment was successful
-    try {
-      // Create order in Firestore
-      const order = {
-        userId: currentUser.uid,
-        customer: {
-          name: currentOrderData.customerName,
-          email: currentOrderData.customerEmail,
-          phone: currentOrderData.customerPhone
-        },
-        items: cart,
-        total: currentOrderData.totalAmount,
-        paymentMethod: currentOrderData.paymentMethod,
-        deliveryAddress: currentOrderData.deliveryAddress,
-        deliveryNotes: currentOrderData.deliveryNotes,
-        status: 'confirmed',
-        orderNumber: currentOrderData.orderId,
-        flutterwaveTransactionId: response.transaction_id,
-        flutterwaveTxRef: response.tx_ref,
-        paidAt: firebase.firestore.FieldValue.serverTimestamp(),
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
-      
-      // Save order to Firestore
-      await db.collection('orders').add(order);
-      
-      showNotification('Payment successful! Order confirmed.');
-      
-      // Clear cart and close modals
-      cart = {};
-      localStorage.setItem('freshdrop_cart', JSON.stringify(cart));
-      updateCartCount();
-      updateCartDisplay();
-      toggleModal('paymentModal');
-      
-      // Reset form and show success
-      document.getElementById('deliveryAddress').value = '';
-      document.getElementById('deliveryNotes').value = '';
-      showPaymentStep1();
-      
-      // Show success message with order details
-      showOrderSuccess(currentOrderData.orderId, currentOrderData.totalAmount);
-      
-    } catch (error) {
-      console.error('Error saving order:', error);
-      showNotification('Payment successful but order creation failed. Please contact support.');
-    }
-  } else {
-    // Payment failed
+    console.error('Payment error:', error);
     showNotification('Payment failed. Please try again.');
   }
-}
-
-function generateOrderNumber() {
-  const timestamp = Date.now();
-  const random = Math.floor(Math.random() * 1000);
-  return `FRESH-${timestamp}-${random}`;
-}
-
-function showOrderSuccess(orderId, totalAmount) {
-  const successHtml = `
-    <div class="order-success">
-      <div class="success-icon">
-        <i class="fas fa-check-circle"></i>
-      </div>
-      <h3>Order Placed Successfully!</h3>
-      <div class="success-details">
-        <p><strong>Order ID:</strong> ${orderId}</p>
-        <p><strong>Total Amount:</strong> ${formatCurrency(totalAmount)}</p>
-        <p>We will contact you shortly to confirm your order and delivery details.</p>
-      </div>
-      <div class="success-actions">
-        <button class="btn btn-primary" onclick="toggleModal('accountModal'); document.querySelector('[data-tab=\\'orders\\']').click();">
-          <i class="fas fa-shopping-bag"></i>
-          View Orders
-        </button>
-        <button class="btn btn-outline" onclick="clearSearchAndFilters()">
-          <i class="fas fa-shopping-cart"></i>
-          Continue Shopping
-        </button>
-      </div>
-    </div>
-  `;
-  
-  // You could show this in a modal or replace the current content
-  showNotification('Order placed successfully! Check your orders for details.');
 }
 
 // Account and Orders Functions
@@ -939,6 +636,12 @@ function updateOrderStats(total, pending, completed) {
   totalOrders.textContent = total;
   pendingOrders.textContent = pending;
   completedOrders.textContent = completed;
+}
+
+function generateOrderNumber() {
+  const timestamp = Date.now();
+  const random = Math.floor(Math.random() * 1000);
+  return `FRESH-${timestamp}-${random}`;
 }
 
 // Modal Management
@@ -1173,7 +876,11 @@ function clearSearch() {
 // Update cart count
 function updateCartCount() {
   const count = Object.values(cart).reduce((total, item) => total + item.quantity, 0);
-  cartCount.textContent = count;
+  floatingCartCount.textContent = count;
+  
+  // Update floating cart total
+  const totalAmount = Object.values(cart).reduce((total, item) => total + (item.price * item.quantity), 0);
+  floatingCartTotal.textContent = formatCurrency(totalAmount);
 }
 
 // Update cart display
@@ -1374,9 +1081,6 @@ async function initApp() {
   // Initialize payment system
   initPayment();
   
-  // Initialize profile edit
-  initProfileEdit();
-  
   // Test Firebase connection first
   const connected = await testFirebaseConnection();
   
@@ -1393,7 +1097,7 @@ async function initApp() {
   updateProductDisplay();
   
   // Event listeners
-  cartIcon.addEventListener('click', toggleCart);
+  floatingCartBtn.addEventListener('click', toggleCart);
   closeCart.addEventListener('click', toggleCart);
   
   // Category filter events
