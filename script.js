@@ -173,6 +173,8 @@ function initAuth() {
       console.log("👤 User signed in:", user.email);
       await updateUserProfile(user);
       showUserMenu();
+      // Hide auth buttons after successful login
+      hideAuthButtons();
     } else {
       currentUser = null;
       console.log("👤 No user signed in");
@@ -272,6 +274,28 @@ function initAuth() {
 function toggleUserDropdown() {
   userDropdown.classList.toggle('active');
   userDropdownBtn.classList.toggle('active');
+}
+
+function hideAuthButtons() {
+  // Completely hide the auth buttons container
+  authButtons.style.display = 'none';
+  userMenuWrapper.style.display = 'block';
+}
+
+function showUserMenu() {
+  // Hide auth buttons and show user menu
+  hideAuthButtons();
+  userMenuWrapper.style.display = 'block';
+  mobileAuthSection.style.display = 'none';
+  mobileUserSection.style.display = 'block';
+}
+
+function showAuthButtons() {
+  // Show auth buttons and hide user menu
+  authButtons.style.display = 'flex';
+  userMenuWrapper.style.display = 'none';
+  mobileAuthSection.style.display = 'block';
+  mobileUserSection.style.display = 'none';
 }
 
 async function handleSocialLogin(provider) {
@@ -383,7 +407,7 @@ async function handleLogout() {
     await auth.signOut();
     showNotification('Logged out successfully');
     closeMobileMenuFunction();
-    toggleModal('accountModal');
+    // REMOVED: toggleModal('accountModal'); - Don't open account modal on logout
     userDropdown.classList.remove('active');
     userDropdownBtn.classList.remove('active');
     
@@ -424,20 +448,6 @@ async function updateUserProfile(user) {
   } catch (error) {
     console.error('Error fetching user profile:', error);
   }
-}
-
-function showUserMenu() {
-  authButtons.style.display = 'flex';
-  userMenuWrapper.style.display = 'block';
-  mobileAuthSection.style.display = 'none';
-  mobileUserSection.style.display = 'block';
-}
-
-function showAuthButtons() {
-  authButtons.style.display = 'flex';
-  userMenuWrapper.style.display = 'none';
-  mobileAuthSection.style.display = 'block';
-  mobileUserSection.style.display = 'none';
 }
 
 // Payment Functions

@@ -1560,6 +1560,18 @@ header {
   align-items: center;
   gap: 1rem;
   flex-shrink: 0;
+  transition: var(--transition);
+}
+
+/* When auth buttons are hidden, adjust spacing */
+.nav-actions:has(.auth-buttons[style*="display: none"]) {
+  gap: 0.5rem;
+}
+
+/* Ensure user menu wrapper takes proper space when visible */
+.user-menu-wrapper {
+  position: relative;
+  min-width: 120px; /* Give it some minimum width */
 }
 
 .hamburger {
@@ -1823,6 +1835,10 @@ header {
   .mobile-contact-item {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+  
+  .user-menu-wrapper {
+    min-width: auto;
   }
 }
 
